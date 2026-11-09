@@ -1,0 +1,3234 @@
+# MASTER BUILD PROMPT — PRODUCTION-READY SOCIAL MEDIA APPLICATION
+## Native Android Kotlin + Jetpack Compose + Nexconn Chat SDK + Nexconn Call SDK
+
+### 1. Your role
+
+Act as a principal Android architect, senior Kotlin engineer, backend architect, database engineer, UI/UX designer, DevOps engineer, and real-time communications specialist.
+
+Your responsibility is to design, implement, test, and deliver a complete, scalable, production-ready social media application.
+
+This is not a prototype, static UI implementation, or frontend-only project.
+
+Build an actual working social media platform with:
+- Native Android frontend using Kotlin.
+- Jetpack Compose UI.
+- Complete backend using Kotlin and Ktor.
+- Production database and persistent storage.
+- REST APIs and real-time communication.
+- Nexconn Chat SDK integration.
+- Nexconn Call SDK integration.
+- Voice and video calling.
+- Live audio discussion rooms.
+- Media uploading and playback.
+- Authentication, profiles, social networking, and content discovery.
+- Notifications, moderation, and privacy controls.
+
+The four supplied HTML screens are the primary design references. Preserve their visual identity, layouts, spacing, component hierarchy, imagery treatment, and interaction patterns while translating them into native Android UI.
+
+Do not simply convert the HTML into a WebView. Rebuild everything using native Kotlin and Jetpack Compose.
+
+---
+
+# 2. Core product vision
+
+Build a modern, premium social networking application combining:
+
+1. A personalized social media feed.
+2. Creator profiles and short-form video Moments.
+3. A Discover experience for finding people and trending content.
+4. Pod — a community discussion and live audio experience.
+5. Direct and group messaging powered by Nexconn.
+6. One-to-one audio and video calling.
+7. Group audio conversations and live Pod sessions.
+
+The application must have a consistent design language throughout every screen.
+
+The five primary navigation destinations are:
+
+- Home
+- Discover
+- Create
+- Pod
+- Profile
+
+The center Create button must be visually elevated and use the signature yellow accent.
+
+The application should feel like a professionally engineered social media product, not an ordinary template-based Instagram clone.
+
+---
+
+# 3. Technology stack
+
+## Android application
+
+Use:
+
+- Kotlin.
+- Jetpack Compose.
+- Material 3 with a custom design system.
+- MVVM + Clean Architecture.
+- Kotlin Coroutines.
+- StateFlow and SharedFlow.
+- Hilt for dependency injection.
+- Jetpack Navigation Compose.
+- Retrofit or Ktor Client for backend networking.
+- OkHttp where needed.
+- Room for local structured persistence.
+- DataStore for application preferences.
+- Paging 3 for large feeds and message history where appropriate.
+- Coil for asynchronous image loading.
+- Media3 for video and audio playback.
+- WorkManager for background tasks.
+- Firebase Cloud Messaging for application push notification delivery.
+
+Use current stable, mutually compatible dependency versions. Do not arbitrarily pin obsolete dependencies.
+
+## Backend
+
+Use Kotlin with Ktor.
+
+Backend stack:
+
+- Kotlin.
+- Ktor server.
+- PostgreSQL.
+- PostGIS for opt-in nearby discovery.
+- Redis for caching, rate limiting, and temporary session data.
+- Flyway for database migrations.
+- Exposed or another production-compatible database access layer.
+- JWT-based authentication with refresh-token rotation.
+- Argon2id for password hashing.
+- S3-compatible object storage.
+- MinIO for local development.
+- AWS S3 or compatible object storage for production.
+- Firebase Admin SDK for FCM.
+- OpenAPI documentation.
+- Docker and Docker Compose.
+
+Organize the backend as a modular monolith initially. Keep module boundaries clean so individual services can be extracted later without rewriting the application.
+
+---
+
+# 4. Design system — follow the supplied HTML
+
+The uploaded HTML is the visual source of truth.
+
+The four references include:
+
+- Home: Social Feed — For You.
+- Profile: Creator Profile with Post and Moments.
+- Discover: People Nearby and Trending Sparks.
+- Pod: Point of Discussion.
+
+Reference file: the supplied Pasted text containing the four screen implementations.
+
+## Global visual identity
+
+Use a clean, premium, contemporary design.
+
+### Color palette
+
+Define reusable Kotlin color tokens.
+
+| Token | Color |
+|---|---|
+| Primary yellow | #F9D100 |
+| Yellow hover/accent | #E5C000 |
+| Primary container | #FFC700 |
+| Main background | #F9F9F9 |
+| White surface | #FFFFFF |
+| Main text | #1A1C1C |
+| Dark text | #121212 |
+| Secondary text | #5F5E5E |
+| Muted gray | #9E9EA7 |
+| Surface low | #F3F3F3 |
+| Surface high | #E8E8E8 |
+| Border | #D2C5AB |
+| Tertiary accent | #B52330 |
+| Success | #10B981 |
+| Error | #BA1A1A |
+
+### Typography
+
+Use:
+- Plus Jakarta Sans for headlines, titles, navigation labels, and emphasis.
+- Inter for body content and supporting information.
+
+Establish centralized typography tokens for:
+- Display hero.
+- Headline large.
+- Headline medium.
+- Headline small.
+- Body large.
+- Body medium.
+- Body small.
+- Label large.
+- Label medium.
+- Caption.
+
+Maintain consistent font sizes and line heights across all screens.
+
+Do not independently change typography on individual screens.
+
+### Component styling
+
+Implement reusable components:
+
+- Rounded cards.
+- Circular action buttons.
+- Floating translucent bottom navigation.
+- Yellow active indicators.
+- Horizontal story carousels.
+- Overlapping creator avatars.
+- Verified badges.
+- Trending chips.
+- Gradient overlays on media.
+- Media playback controls.
+- Poll progress indicators.
+- Waveform visualizations.
+- Bottom sheets.
+- Dialogs.
+- Loading skeletons.
+- Empty states.
+- Error states.
+
+Use rounded corners, subtle shadows, restrained borders, appropriate padding, and consistent component dimensions.
+
+### Layout requirements
+
+Design for modern Android phones, not a fixed 393-pixel or 420-pixel web viewport.
+
+Account for:
+- Status bar.
+- Navigation bar.
+- Display cutouts.
+- Edge-to-edge rendering.
+- Safe drawing insets.
+- Different screen densities.
+- Small and large displays.
+- Landscape where applicable.
+
+Preserve the visual proportions of the supplied references while allowing responsive native layouts.
+
+---
+
+# 5. Primary screen implementation
+
+## SCREEN 1 — HOME
+
+Use the supplied Social Feed — For You HTML as the primary reference.
+
+### Top navigation
+
+Build a clean header with:
+
+- Following tab.
+- For You tab.
+- Yellow circular search button.
+- Active tab indicator.
+
+Following and For You must be functional and backed by actual feed queries.
+
+### Stories section
+
+Build a horizontally scrollable Stories carousel.
+
+Each story card must support:
+- Profile image.
+- Story media.
+- User name.
+- Live status.
+- Premiere status where applicable.
+- Viewed/unviewed indicator.
+- Story progression.
+- Tap-to-open full-screen story viewer.
+
+Story viewer features:
+- Image and video stories.
+- Progress indicators.
+- Tap left/right to navigate.
+- Long press to pause.
+- Swipe down to close.
+- View count for the owner.
+- Story reactions and replies.
+- Expiration after the configured story lifetime.
+
+Default story lifetime: 24 hours.
+
+### Trending section
+
+Create a vertical content feed with visually rich content cards.
+
+Each card should support:
+- Creator avatar.
+- Creator name and username.
+- Verified badge.
+- Image or video media.
+- Gradient overlays.
+- Like count.
+- Comment count.
+- Share count.
+- Bookmark action.
+
+Implement a proper interaction system.
+
+Users must be able to:
+- Like and unlike.
+- Comment.
+- Reply to comments.
+- Share.
+- Bookmark.
+- Open creator profiles.
+- Report inappropriate posts.
+- Follow creators.
+
+### Following feed
+
+Display posts from followed accounts using cursor-based pagination.
+
+### For You feed
+
+Build a personalized feed ranking system.
+
+Use:
+- User interests.
+- Follow relationships.
+- Post engagement.
+- Content recency.
+- Hashtag relevance.
+- User interaction history.
+- Content quality and moderation status.
+
+Avoid presenting fake recommendation confidence scores or arbitrary ranking values.
+
+### Performance
+
+Use lazy loading, image resizing, paging, prefetching, caching, and efficient Compose state management.
+
+Do not reload the entire feed when a user likes one post.
+
+---
+
+## SCREEN 2 — PROFILE
+
+Use the supplied Profile - Leslie Alexander HTML.
+
+### Profile header
+
+Implement:
+
+- Back button when viewing another user.
+- Profile title.
+- Notifications icon.
+- Profile avatar.
+- Followers count.
+- Following count.
+- Display name.
+- Username.
+- Verified badge.
+- Profile description.
+- Optional location and creator category.
+
+The sample values such as 2.5M followers, 120 following, and Leslie Alexander are design examples only.
+
+Always retrieve actual values from the backend.
+
+### Profile actions
+
+Support:
+- Edit profile.
+- Follow/unfollow.
+- Message.
+- Start voice call.
+- Start video call.
+- Share profile.
+- Report user.
+- Block user.
+
+Show the appropriate action depending on whether the viewer owns the profile.
+
+### Post and Moments tabs
+
+Implement functional tabs:
+
+**Post**
+- Display standard image, video, text, and mixed-media posts.
+- Use an adaptable grid or feed layout.
+
+**Moments**
+- Display short-form creator videos in a three-column grid.
+- Maintain the approximately 3:4.6 reference aspect ratio.
+- Display views over media.
+- Include appropriate gradient overlays.
+- Open a full-screen vertical media player when tapped.
+
+### Creator media banner
+
+Recreate the reference's overlapping avatar banner.
+
+Display:
+- Creator avatars.
+- Total videos/Moments count.
+- Supporting description.
+- Take a look action.
+
+Load this information dynamically.
+
+### Profile editing
+
+Provide screens for:
+- Name.
+- Username.
+- Bio.
+- Profile image.
+- Cover image if enabled.
+- Website.
+- Interest categories.
+- Privacy settings.
+
+Validate usernames on the backend and prevent duplicate usernames.
+
+---
+
+## SCREEN 3 — DISCOVER
+
+Use the supplied Discover & Explore HTML.
+
+### Top section
+
+Implement:
+- Discover tab.
+- Explore tab.
+- Search button.
+- Filter button.
+
+Both tabs must provide real functionality.
+
+### People Nearby
+
+Recreate the layered profile-card stack.
+
+Each profile card should display:
+- User image.
+- Display name.
+- Age only when voluntarily provided and appropriate.
+- Verified status.
+- Profession or creator description.
+- Online status.
+- Shared interests.
+- Match/relevance information.
+- Approximate distance.
+
+Add actions:
+- Pass.
+- Super Like.
+- Like & Connect.
+
+Do not assume a match until the backend confirms the corresponding connection state.
+
+### Privacy requirements for Nearby
+
+Location discovery must be explicitly opt-in.
+
+- Request Android location permission only when the user enables nearby discovery.
+- Never request background location for basic nearby discovery.
+- Do not expose exact user coordinates to other users.
+- Return approximate distance or privacy-preserving location bands.
+- Allow users to disable location visibility.
+- Provide location retention and deletion policies.
+
+Use PostGIS for spatial queries.
+
+### Trending Sparks
+
+Build the horizontal filter chips:
+
+- Trending.
+- New Sparks.
+- Reels.
+- Creative.
+- Audio Session.
+
+Each filter must update the backend query and displayed items.
+
+### In Your Radar banner
+
+Recreate overlapping creator avatars and creator count.
+
+Load real creator data.
+
+### Editorial bento grid
+
+Implement visually asymmetric content cards, including:
+- Streetwear and fashion lookbooks.
+- Creative studio/reel cards.
+- Audio session cards.
+
+Provide appropriate media gradients, user information, category badges, view counts, and navigation actions.
+
+### Discover search and filters
+
+Support:
+- Users.
+- Hashtags.
+- Posts.
+- Reels.
+- Audio rooms.
+- Pod discussions.
+- Creator categories.
+
+Filters should work across real backend data.
+
+---
+
+## SCREEN 4 — POD (POINT OF DISCUSSION)
+
+Use the supplied Pod HTML as the primary reference.
+
+This is a major product feature, not just another ordinary feed.
+
+Pod combines community discussions, public content, polls, media, audio content, and real-time live audio rooms.
+
+### Header
+
+Display:
+- Pod icon.
+- Pod title.
+- Live listener count.
+- Search.
+- Start Pod Broadcast button.
+
+The live listener count must be obtained from actual session state.
+
+### Trending topics ribbon
+
+Create a horizontally scrollable topic bar containing:
+- Feed.
+- Trending hashtags.
+- Live topic indicators.
+- Topic participant counts.
+
+Allow users to select hashtags and view associated conversations.
+
+### Pod feed
+
+Create a vertically scrollable feed containing the following content types.
+
+**1. Community polls**
+
+Recreate the reference's expiring community vote card.
+
+Implement:
+- Author avatar.
+- Verified badge.
+- Username.
+- Time since publication.
+- Expiration countdown.
+- Poll question.
+- Description.
+- Multiple poll options.
+- Vote counts.
+- Percentage distribution.
+- Total votes.
+- Discussion replies.
+
+Voting must work with backend persistence.
+
+Enforce one valid vote per eligible user per poll unless the creator explicitly configures a different voting rule.
+
+Calculate percentages using actual vote totals.
+
+Do not use hardcoded 62%, 28%, and 10% values.
+
+**2. Live Audio Pod**
+
+This is one of the most important features.
+
+Recreate the reference's live audio card with:
+- Live Audio Pod badge.
+- Host and co-host avatars.
+- Session title.
+- Current listener count.
+- Audio waveform.
+- Playback/session controls.
+- Join In button.
+
+Integrate the Nexconn Call SDK for the actual audio communication.
+
+A live audio Pod should support:
+- Host.
+- Co-host.
+- Listener.
+- Speaker request.
+- Speaker approval.
+- Participant invitation.
+- Participant removal.
+- Mute/unmute.
+- Leave room.
+- Host-end session.
+- Participant count.
+- Call state synchronization.
+
+Use a multi-participant audio-only Call session for the live audio experience.
+
+Only users authorized by the application's room rules may join or speak.
+
+The waveform must reflect actual audio level/progress where supported. Do not animate fabricated activity as though it represented live audio.
+
+**3. Viral video / media discussion cards**
+
+Implement:
+- Video thumbnail.
+- Play action.
+- Author details.
+- Media category badge.
+- View count.
+- Description.
+- Like.
+- Comment.
+- Repost.
+- Bookmark.
+
+Open a proper vertical or full-screen media player.
+
+**4. Editorial dispatch cards**
+
+Display:
+- Article title.
+- Summary.
+- Author.
+- Source domain.
+- Estimated reading time.
+- Community discussion count.
+
+Open external links safely or display an in-app article viewer.
+
+**5. Community soundtrack**
+
+Display:
+- Album/track artwork.
+- Track title.
+- Artist.
+- Play action.
+- Trending ranking.
+- Number of associated Pod clips.
+- Use in Pod.
+- Listen & Talk.
+
+Use a suitable media provider only when licensing and playback rights are available. Never assume arbitrary external music is available for commercial playback.
+
+**6. Creator essays**
+
+Support text-based discussions with:
+- Author.
+- Username.
+- Date.
+- Title.
+- Content preview.
+- Likes.
+- Comments.
+- Reposts.
+- Bookmarks.
+- Sharing.
+
+### Create a Pod
+
+Clicking the Pod broadcast action must open a creation flow.
+
+Allow:
+- Pod title.
+- Description.
+- Topic/hashtag.
+- Cover artwork.
+- Public/private visibility.
+- Audio-only or audio-video mode when enabled.
+- Invite co-hosts.
+- Set participant rules.
+
+Persist the created Pod before starting its live session.
+
+### Pod moderation
+
+Implement:
+- Host moderation controls.
+- Mute participant.
+- Remove participant.
+- Report participant.
+- End session.
+- Block abusive users.
+- Session participation rules.
+
+---
+
+# 6. Nexconn Chat SDK — mandatory integration
+
+Use the official Nexconn Android Chat SDK.
+
+Official documentation:
+https://docs.nexconn.ai/chatsdk-android
+
+Build a dedicated communication layer instead of integrating SDK calls directly into Compose screens.
+
+### Android dependencies
+
+Use the official Nexconn Maven repository and the latest compatible stable Chat and Call SDK versions.
+
+Chat dependency:
+
+`implementation("ai.nexconn.chat:chat:<verified-compatible-version>")`
+
+Call dependency:
+
+`implementation("ai.nexconn.chat:call:<verified-compatible-version>")`
+
+Configure repositories according to the current official documentation.
+
+Optional push integrations should be added only after checking their current compatibility and configuration requirements.
+
+Do not invent SDK versions, methods, constructors, or callback interfaces.
+
+### SDK initialization
+
+Create a singleton NexconnChatManager or equivalent application-scoped integration component.
+
+Responsibilities:
+- Initialize the SDK once.
+- Maintain connection state.
+- Obtain user tokens through the backend.
+- Connect the authenticated user.
+- Register message handlers.
+- Handle incoming messages.
+- Handle connection state changes.
+- Reconnect according to the SDK lifecycle.
+- Remove handlers and clean up safely.
+
+Follow Nexconn's current documented initialization and connection flow.
+
+Use the authenticated backend account ID as the stable Nexconn user ID.
+
+### Chat functionality
+
+Implement:
+
+**Direct messages**
+- One-to-one conversations.
+- Text.
+- Emoji.
+- Images.
+- Videos.
+- Voice messages.
+- File attachments.
+- Message replies.
+- Message editing where supported.
+- Message deletion where supported.
+- Message forwarding where supported.
+- Read receipts.
+- Delivery states.
+- Typing indicators.
+- Online status.
+- Last active status.
+- Conversation history.
+- Search where supported.
+
+**Group messaging**
+- Create group.
+- Add members.
+- Remove members.
+- Group description.
+- Group avatar.
+- Member roles.
+- Group information.
+- Group notifications.
+
+**Chat inbox**
+- Recent conversations.
+- Last message.
+- Timestamp.
+- Unread count.
+- Online indicator.
+- Pinned conversations.
+- Muted conversations.
+- Conversation search.
+
+**Chat UI**
+
+Build native Jetpack Compose interfaces:
+- Chat list.
+- Conversation screen.
+- Message bubbles.
+- Media previews.
+- Attachment selector.
+- Voice recording control.
+- Message composer.
+- Typing indicator.
+- Delivery/read status.
+- User presence.
+
+Use the Chat SDK for the actual transport and message events, not a fabricated REST-based messaging implementation.
+
+Choose the appropriate Nexconn channel type:
+- Direct channels for private conversations.
+- Group channels for private groups.
+- Community channels for persistent member-based communities.
+- Open channels for public real-time discussion scenarios.
+
+Verify the exact current SDK APIs for each channel type before implementing them.
+
+---
+
+# 7. Nexconn Call SDK — mandatory integration
+
+Official Android documentation:
+
+https://docs.nexconn.ai/callsdk-android
+
+Integrate the actual Nexconn Call SDK.
+
+### Critical initialization order
+
+Implement the lifecycle documented by Nexconn:
+
+1. Call `NCCallEngine.install()` once before Chat SDK initialization.
+2. Initialize `NCEngine`.
+3. Register message and call event handlers at the appropriate lifecycle stage.
+4. Obtain the authenticated user's Nexconn access token through the backend.
+5. Connect the Chat SDK.
+6. After successful Chat connection, initialize `NCCallEngine`.
+7. Monitor call events and API results.
+8. Clean up handlers and resources according to the current SDK lifecycle.
+
+Never initialize the calling experience independently of the required connected Chat SDK.
+
+### One-to-one calls
+
+Implement:
+- Audio call.
+- Video call.
+- Incoming call screen.
+- Outgoing call screen.
+- Accept call.
+- Reject call.
+- End call.
+- Mute microphone.
+- Speakerphone.
+- Camera on/off.
+- Switch front/rear camera.
+- Call duration.
+- Connection state.
+- Reconnection and error handling.
+
+### Group calls
+
+Use the documented group calling functionality.
+
+Support:
+- Multi-participant audio.
+- Multi-participant video where enabled.
+- Invite participants.
+- Accept invitation.
+- Join an ongoing group call.
+- Leave call.
+- Mute/unmute.
+- Participant state management.
+
+### Permissions
+
+Implement Android runtime permission handling for:
+- RECORD_AUDIO.
+- CAMERA.
+
+Request permissions only when the user initiates or accepts the relevant call.
+
+Handle denied permissions gracefully.
+
+Do not crash if the user denies microphone or camera access.
+
+### Video rendering
+
+Integrate the official Nexconn local and remote video rendering views into the native UI.
+
+Verify the current SDK rendering-view classes and required lifecycle management.
+
+### Call event synchronization
+
+Register the official call event handlers.
+
+Handle:
+- Incoming call.
+- Outgoing call.
+- Call connected.
+- Call ended.
+- Call API failures.
+- Busy participants.
+- Restored call events.
+- Local call logs.
+- Server call logs.
+
+Map completed call logs into the appropriate conversation history entry.
+
+### Chat-to-call integration
+
+A user should be able to initiate audio or video calls from a direct conversation.
+
+Display call summaries in conversation history.
+
+Use Nexconn's local call-log event for immediate display and server call-log event for final synchronized history where available.
+
+### Pod-to-call integration
+
+When a user creates or joins a live audio Pod:
+- Create or retrieve the appropriate application Pod record.
+- Validate membership and permissions.
+- Start or join the Nexconn multi-participant audio call.
+- Maintain the Pod session's lifecycle.
+- Update participant and listener state.
+- Handle disconnects and rejoining.
+- Record the session outcome.
+
+Do not invent unsupported Nexconn Server Call API endpoints. Use the official Android Call SDK for documented call actions and the documented Call Webhooks for server-side lifecycle synchronization.
+
+---
+
+# 8. Backend architecture
+
+Build a secure Ktor backend with clearly separated modules.
+
+Recommended modules:
+
+1. Authentication.
+2. User Management.
+3. Profiles.
+4. Social Graph.
+5. Posts.
+6. Moments and Stories.
+7. Feed.
+8. Discovery.
+9. Hashtags and Trending.
+10. Comments and Reactions.
+11. Polls and Voting.
+12. Pod.
+13. Media Management.
+14. Nexconn Chat Integration.
+15. Nexconn Call Integration.
+16. Notifications.
+17. Moderation and Reporting.
+18. Admin and Platform Configuration.
+
+Each module must have:
+- Route/controller layer.
+- Request/response DTOs.
+- Service layer.
+- Repository layer.
+- Validation.
+- Error mapping.
+- Appropriate tests.
+
+Use dependency injection and clear interfaces between modules.
+
+---
+
+# 9. Authentication and account security
+
+Implement:
+- Account registration.
+- Login.
+- Logout.
+- Access token issuance.
+- Refresh token rotation.
+- Password reset.
+- Email verification.
+- Session/device management.
+- Account deactivation.
+- Account deletion.
+
+Use secure password storage with Argon2id.
+
+Protect authentication endpoints using rate limiting and abuse detection.
+
+Do not trust user IDs submitted by the client for authorization decisions.
+
+Use the authenticated account identity from the validated security principal.
+
+Add:
+- Account lockout or progressive throttling.
+- Input validation.
+- Request size limits.
+- Secure HTTP headers.
+- Audit logs for sensitive operations.
+- Token revocation.
+- Secure storage on Android.
+
+---
+
+# 10. Nexconn backend integration
+
+Create a dedicated `NexconnIntegrationModule` in the Ktor backend.
+
+The backend must manage:
+- Nexconn user registration/synchronization.
+- User token issuance.
+- Channel management when performed through Platform APIs.
+- Nexconn user identity mapping.
+- Chat webhook processing.
+- Call webhook processing.
+- Push configuration.
+- Communication event synchronization.
+
+### Token endpoint
+
+Implement:
+
+`POST /api/v1/communications/nexconn/token`
+
+The flow must be:
+
+1. Android sends an authenticated request to the Ktor backend.
+2. Backend identifies the authenticated user.
+3. Backend maps that account to a stable Nexconn user ID.
+4. Backend registers/synchronizes the Nexconn identity where required.
+5. Backend calls the appropriate Nexconn Platform Chat API.
+6. Backend signs the request using the official Nexconn signing procedure.
+7. Backend returns the access token and required non-secret connection metadata.
+8. Android connects through the Nexconn Chat SDK.
+
+Use the current official API path, regional base URL, headers, and request format.
+
+Nexconn App Secret must exist only in backend environment variables or an approved secrets manager.
+
+Never:
+- Put App Secret in Kotlin source.
+- Put App Secret in Gradle BuildConfig.
+- Return App Secret to Android.
+- Ship App Secret in an APK.
+- Log App Secret.
+- Call protected Platform Chat API operations directly from the mobile app.
+
+Support regional configuration and appropriate API failure handling.
+
+### Webhooks
+
+Implement dedicated endpoints for Nexconn events:
+
+- `/api/v1/webhooks/nexconn/chat`
+- `/api/v1/webhooks/nexconn/call`
+
+Validate signatures according to Nexconn's current webhook documentation.
+
+Implement:
+- Request validation.
+- Timestamp freshness checks.
+- Replay protection.
+- Event ID deduplication.
+- Idempotent processing.
+- Persistent event tracking.
+- Appropriate retry handling.
+- Monitoring and structured logs.
+
+Return successful responses only after safely accepting the event for processing.
+
+---
+
+# 11. REST API design
+
+Publish a complete OpenAPI 3 specification.
+
+Use a consistent `/api/v1` prefix, pagination, validation, and standard error response format.
+
+Suggested endpoint structure:
+
+### Authentication
+
+- POST `/auth/register`
+- POST `/auth/login`
+- POST `/auth/refresh`
+- POST `/auth/logout`
+- POST `/auth/forgot-password`
+- POST `/auth/reset-password`
+- POST `/auth/verify-email`
+
+### User and profile
+
+- GET `/users/me`
+- PATCH `/users/me`
+- GET `/users/{userId}`
+- GET `/users/{userId}/posts`
+- GET `/users/{userId}/moments`
+- POST `/users/{userId}/follow`
+- DELETE `/users/{userId}/follow`
+- GET `/users/{userId}/followers`
+- GET `/users/{userId}/following`
+- POST `/users/{userId}/block`
+- DELETE `/users/{userId}/block`
+
+### Feed and posts
+
+- GET `/feed/for-you`
+- GET `/feed/following`
+- POST `/posts`
+- GET `/posts/{postId}`
+- PATCH `/posts/{postId}`
+- DELETE `/posts/{postId}`
+- POST `/posts/{postId}/like`
+- DELETE `/posts/{postId}/like`
+- POST `/posts/{postId}/bookmark`
+- DELETE `/posts/{postId}/bookmark`
+- POST `/posts/{postId}/share`
+- POST `/posts/{postId}/comments`
+- GET `/posts/{postId}/comments`
+
+### Moments and Stories
+
+- POST `/stories`
+- GET `/stories/feed`
+- GET `/stories/{storyId}`
+- POST `/stories/{storyId}/view`
+- POST `/stories/{storyId}/reaction`
+- DELETE `/stories/{storyId}`
+
+- POST `/moments`
+- GET `/moments/{momentId}`
+- DELETE `/moments/{momentId}`
+
+### Discovery
+
+- GET `/discover/people`
+- POST `/discover/pass`
+- POST `/discover/like`
+- POST `/discover/super-like`
+- GET `/discover/trending`
+- GET `/discover/search`
+- GET `/discover/hashtags/{hashtag}`
+- GET `/discover/audio-rooms`
+
+### Pod
+
+- GET `/pods/feed`
+- POST `/pods`
+- GET `/pods/{podId}`
+- PATCH `/pods/{podId}`
+- DELETE `/pods/{podId}`
+- POST `/pods/{podId}/join`
+- POST `/pods/{podId}/leave`
+- POST `/pods/{podId}/polls`
+- POST `/pods/{podId}/polls/{pollId}/vote`
+- GET `/pods/{podId}/polls/{pollId}/results`
+- POST `/pods/{podId}/report`
+
+### Calls and communication
+
+- POST `/communications/nexconn/token`
+- GET `/communications/conversations`
+- GET `/communications/call-history`
+- POST `/communications/devices`
+- DELETE `/communications/devices/{deviceId}`
+
+Use Nexconn SDK for actual communication actions. These application endpoints should provide authorization, metadata, device registration, and history where required, not a duplicate fabricated call transport.
+
+### Media
+
+- POST `/media/upload-intent`
+- POST `/media/complete`
+- GET `/media/{mediaId}`
+- DELETE `/media/{mediaId}`
+
+Use short-lived presigned URLs for uploads and downloads where appropriate.
+
+### Notifications
+
+- GET `/notifications`
+- PATCH `/notifications/{notificationId}/read`
+- POST `/notifications/read-all`
+- GET `/notifications/preferences`
+- PATCH `/notifications/preferences`
+
+---
+
+# 12. Database architecture
+
+Use PostgreSQL with Flyway migrations.
+
+Create normalized schemas and appropriate indexes.
+
+Minimum entities:
+
+**Authentication**
+- users
+- user_credentials
+- refresh_tokens
+- user_sessions
+- email_verifications
+- password_reset_tokens
+
+**Social network**
+- user_profiles
+- user_interests
+- follows
+- connection_requests
+- blocks
+- mutes
+
+**Content**
+- posts
+- post_media
+- post_likes
+- comments
+- comment_likes
+- post_bookmarks
+- post_shares
+- hashtags
+- post_hashtags
+
+**Stories and Moments**
+- stories
+- story_media
+- story_views
+- story_reactions
+- moments
+
+**Discovery**
+- discovery_preferences
+- discovery_actions
+- location_visibility
+- user_location_data
+
+**Pod**
+- pods
+- pod_members
+- pod_participants
+- pod_topics
+- pod_polls
+- poll_options
+- poll_votes
+- pod_sessions
+
+**Media**
+- media_assets
+- media_processing_jobs
+
+**Communication**
+- nexconn_user_mappings
+- nexconn_channel_mappings
+- call_history
+- communication_events
+- webhook_events
+
+**Notifications**
+- notifications
+- device_tokens
+- notification_preferences
+
+**Safety**
+- user_reports
+- content_reports
+- moderation_actions
+- moderation_audit_logs
+
+Add:
+- Foreign keys.
+- Unique constraints.
+- Composite indexes.
+- Cascading behavior where appropriate.
+- Soft deletion where required.
+- Created/updated timestamps.
+- Transaction-safe operations.
+
+Do not create duplicate or inconsistent relationship records.
+
+Use database transactions for critical operations such as voting, following, and engagement updates.
+
+---
+
+# 13. Media processing and storage
+
+Implement a dedicated media upload pipeline.
+
+Requirements:
+- Image uploads.
+- Video uploads.
+- Story media.
+- Moments media.
+- Profile images.
+- Pod artwork.
+- Audio uploads where supported.
+
+Use presigned S3 uploads.
+
+The application should never send large video files through ordinary JSON REST requests.
+
+Implement:
+- MIME type validation.
+- File size limits.
+- File signature validation.
+- Image resizing.
+- Thumbnail generation.
+- Video transcoding.
+- Audio metadata extraction.
+- Processing status.
+- Retry handling.
+- Secure object access.
+- CDN-friendly media URLs.
+
+For video playback, implement adaptive delivery such as HLS where appropriate.
+
+Use Android Media3 for playback.
+
+Use placeholders and skeletons while media loads. Handle failed, removed, or inaccessible media.
+
+---
+
+# 14. Notifications
+
+Implement FCM notification support.
+
+Notification types include:
+- New follower.
+- Follow request.
+- Like.
+- Comment.
+- Comment reply.
+- Mention.
+- Story reaction.
+- Direct message.
+- Group message.
+- Incoming audio call.
+- Incoming video call.
+- Pod invitation.
+- Pod going live.
+- Poll activity.
+
+Use appropriate notification channels on Android.
+
+Support:
+- Deep links.
+- Notification preferences.
+- Muted conversations.
+- Device token updates.
+- Duplicate notification prevention.
+
+Coordinate Nexconn push notification handling with FCM to prevent duplicate message or call notifications.
+
+Do not assume successful FCM delivery simply because a backend notification record was created.
+
+---
+
+# 15. Security, moderation, and privacy
+
+Production implementation must include:
+
+- Authentication and authorization on all protected routes.
+- Strict ownership checks.
+- Input validation.
+- Rate limiting.
+- Abuse detection.
+- Block and mute functionality.
+- User and content reporting.
+- Moderation workflow.
+- Private/public account controls.
+- Secure media access.
+- Webhook verification.
+- Secrets management.
+- Location privacy.
+- Account deletion.
+- Logging without sensitive credentials.
+
+Provide appropriate safeguards for spam, automated account creation, harassment, inappropriate media, and abusive communications.
+
+Do not expose private conversations or exact location data in public feed APIs.
+
+---
+
+# 16. Android project structure
+
+Use a modular and maintainable structure similar to:
+
+```text
+android/
+├── app/
+├── core/
+│   ├── common/
+│   ├── designsystem/
+│   ├── navigation/
+│   ├── networking/
+│   ├── database/
+│   ├── datastore/
+│   ├── media/
+│   └── notifications/
+├── domain/
+│   ├── model/
+│   ├── repository/
+│   └── usecase/
+├── data/
+│   ├── remote/
+│   ├── local/
+│   ├── repository/
+│   └── mapper/
+├── communication/
+│   ├── nexconn-chat/
+│   └── nexconn-call/
+└── feature/
+    ├── auth/
+    ├── home/
+    ├── profile/
+    ├── discover/
+    ├── pod/
+    ├── create/
+    ├── chat/
+    ├── calling/
+    ├── notifications/
+    └── settings/
+```
+
+Each feature should contain its own:
+- UI.
+- ViewModel.
+- UI state.
+- UI events.
+- Navigation definitions.
+- Domain use cases.
+- Tests.
+
+Use immutable UI state and unidirectional data flow.
+
+Never put network operations, database queries, or Nexconn SDK operations directly inside composable functions.
+
+---
+
+# 17. Backend project structure
+
+```text
+backend/
+├── src/main/kotlin/
+│   ├── Application.kt
+│   ├── config/
+│   ├── plugins/
+│   ├── common/
+│   ├── security/
+│   ├── database/
+│   ├── modules/
+│   │   ├── auth/
+│   │   ├── users/
+│   │   ├── profiles/
+│   │   ├── social/
+│   │   ├── posts/
+│   │   ├── feed/
+│   │   ├── stories/
+│   │   ├── moments/
+│   │   ├── discover/
+│   │   ├── hashtags/
+│   │   ├── pods/
+│   │   ├── polls/
+│   │   ├── media/
+│   │   ├── communications/
+│   │   ├── notifications/
+│   │   ├── moderation/
+│   │   └── webhooks/
+│   └── workers/
+├── src/main/resources/
+│   ├── application.yaml
+│   └── db/migration/
+├── src/test/
+├── Dockerfile
+└── openapi/
+```
+
+Implement environment-specific configurations.
+
+Never commit production credentials, private keys, tokens, or secrets.
+
+---
+
+# 18. Required supporting screens
+
+The four supplied screens are the primary product screens, but they depend on additional experiences.
+
+Build the supporting screens to complete the application:
+
+1. Onboarding.
+2. Registration and login.
+3. Interest selection.
+4. Edit profile.
+5. Search results.
+6. Full-screen Story viewer.
+7. Full-screen Moments/reel viewer.
+8. Create post.
+9. Create story.
+10. Create Moment.
+11. Post detail.
+12. Comments and replies.
+13. Chat inbox.
+14. Direct conversation.
+15. Group conversation.
+16. Incoming call.
+17. Outgoing call.
+18. Active audio-call screen.
+19. Active video-call screen.
+20. Live audio Pod room.
+21. Pod creation.
+22. Notifications.
+23. Settings.
+24. Privacy and security.
+25. Blocked accounts.
+26. Report content/user.
+
+Maintain the same design tokens and navigation behavior across these screens.
+
+---
+
+# 19. Performance requirements
+
+Optimize for real-world Android devices and variable network conditions.
+
+Implement:
+- Efficient lazy lists.
+- Paging.
+- Image caching.
+- Thumbnail loading.
+- Media preloading.
+- Debounced search.
+- Network request cancellation.
+- Offline caching.
+- Incremental UI updates.
+- Room persistence for appropriate local data.
+- Redis-backed backend caching.
+- Database query optimization.
+- Connection pooling.
+- Background processing.
+
+Prevent:
+- Compose recomposition bottlenecks.
+- Large bitmap memory usage.
+- Duplicate API calls.
+- Repeated SDK initialization.
+- Duplicate event handlers.
+- Excessive polling.
+- Main-thread network and database operations.
+- Memory leaks from video and call views.
+
+Use structured concurrency and lifecycle-aware collection of flows.
+
+---
+
+# 20. Testing strategy
+
+Do not declare the application production-ready merely because the project compiles.
+
+### Android unit tests
+
+Test:
+- ViewModels.
+- Repositories.
+- Use cases.
+- UI state transitions.
+- Feed pagination.
+- Like/unlike.
+- Follow/unfollow.
+- Poll voting.
+- Authentication state.
+- SDK connection state handling.
+
+### Android UI tests
+
+Verify:
+- Bottom navigation.
+- Story opening.
+- Feed scrolling.
+- Profile tabs.
+- Discover actions.
+- Pod poll voting.
+- Chat navigation.
+- Call screen interactions.
+- Media viewer controls.
+
+### Backend tests
+
+Test:
+- Authentication.
+- Authorization.
+- Request validation.
+- Database transactions.
+- Feed APIs.
+- Follow relationships.
+- Media upload authorization.
+- Poll vote uniqueness.
+- Webhook signatures.
+- Webhook idempotency.
+- Nexconn integration failures.
+- Notification delivery workflows.
+
+Use isolated test databases and mocked external providers only in automated test environments.
+
+### Integration testing
+
+Test actual Nexconn integration using the development credentials and test accounts when available.
+
+Verify:
+- SDK initialization.
+- User connection.
+- Direct messages.
+- Group messages.
+- Message events.
+- Incoming calls.
+- Outgoing calls.
+- Audio-only calls.
+- Video calls.
+- Group audio sessions.
+- Call termination.
+- Call log synchronization.
+
+Do not mark an integration as successful without an actual successful integration test.
+
+---
+
+# 21. DevOps and deployment
+
+Provide:
+
+- Android development and production configurations.
+- Ktor backend Dockerfile.
+- Docker Compose for local PostgreSQL, Redis, and MinIO.
+- Flyway migration scripts.
+- Environment variable template.
+- OpenAPI specification.
+- CI workflow.
+- Automated build and test steps.
+- Production deployment documentation.
+- Logging and monitoring.
+- Health checks.
+- Backup and recovery instructions.
+
+Create clear `.env.example` files with placeholder values only.
+
+Separate development, staging, and production credentials.
+
+---
+
+# 22. Implementation execution plan
+
+Work in the following sequence.
+
+### Phase 1 — Repository audit and architecture
+
+Inspect the complete repository and supplied HTML.
+
+Determine:
+- Existing application architecture.
+- Existing Android modules.
+- Existing backend.
+- Current Gradle dependencies.
+- Current assets.
+- Existing APIs.
+- Existing navigation.
+
+Do not overwrite working components without a reason.
+
+Prepare a final implementation plan based on the actual repository.
+
+### Phase 2 — Design system
+
+Implement:
+- Colors.
+- Typography.
+- Spacing.
+- Shapes.
+- Buttons.
+- Cards.
+- Navigation.
+- Reusable media components.
+
+Verify the four primary screens visually against the supplied HTML.
+
+### Phase 3 — Core backend
+
+Implement:
+- Authentication.
+- User profiles.
+- Database.
+- Migrations.
+- API framework.
+- Authorization.
+- Error handling.
+
+### Phase 4 — Primary social features
+
+Implement:
+- Home.
+- Profile.
+- Discover.
+- Posts.
+- Stories.
+- Moments.
+- Following.
+- Likes.
+- Comments.
+- Bookmarks.
+
+### Phase 5 — Pod ecosystem
+
+Implement:
+- Pod feed.
+- Hashtags.
+- Polls.
+- Voting.
+- Media discussions.
+- Pod creation.
+- Live-session metadata.
+
+### Phase 6 — Nexconn Chat
+
+Implement complete Nexconn authentication, initialization, communication, and chat UI integration.
+
+### Phase 7 — Nexconn Calls
+
+Implement one-to-one and group calls, incoming-call events, call screen UI, and Pod live audio integration.
+
+### Phase 8 — Media and notifications
+
+Implement storage, processing, playback, FCM, and push integration.
+
+### Phase 9 — Security and quality assurance
+
+Complete security testing, integration tests, performance optimization, and UI regression tests.
+
+### Phase 10 — Production readiness
+
+Verify the complete application from registration through all four primary screens, messaging, calls, media uploads, and Pod sessions.
+
+---
+
+# 23. Strict development rules
+
+These requirements are mandatory.
+
+1. Do not generate a static UI-only application.
+2. Do not use WebViews to reproduce the supplied screens.
+3. Do not replace real API functionality with fake interactions.
+4. Do not hardcode sample social media statistics in production.
+5. Do not use mock repositories in production builds.
+6. Do not create fake Nexconn SDK methods.
+7. Do not hardcode SDK version numbers without verifying their compatibility.
+8. Do not expose Nexconn App Secret.
+9. Do not initialize Nexconn Call SDK in the wrong order.
+10. Do not duplicate communication infrastructure already provided by Nexconn.
+11. Do not introduce unnecessary microservices.
+12. Do not put business logic inside Composables.
+13. Do not ignore network and SDK errors.
+14. Do not leave important buttons non-functional.
+15. Do not leave TODOs for critical functionality.
+16. Do not introduce placeholder data into production feeds.
+17. Do not break the supplied visual design while adding functionality.
+18. Do not claim a feature is working until it has been tested.
+19. Use real data wherever configured integrations and credentials are available.
+20. If a third-party integration requires credentials or console configuration that has not been provided, implement the integration boundary, document the exact missing configuration, and never pretend it has been activated.
+
+---
+
+# 24. Final acceptance criteria
+
+The application is ready for delivery only when:
+
+- All four supplied primary screens are implemented in native Kotlin.
+- The visual design is consistent and responsive.
+- All primary navigation destinations work.
+- User authentication works.
+- User profiles load from the backend.
+- Following and follower relationships persist.
+- Home feed loads real content.
+- Stories and Moments work.
+- Likes, comments, sharing, and bookmarks persist.
+- Discover works with privacy-respecting location handling.
+- Poll voting works and results update correctly.
+- Pod creation and participation work.
+- Live Pod audio works using Nexconn Call SDK.
+- Direct messaging works using Nexconn Chat SDK.
+- Group messaging works using Nexconn Chat SDK.
+- Incoming and outgoing audio calls work.
+- Incoming and outgoing video calls work.
+- Call controls work.
+- Notifications are configured and tested.
+- Media uploads and playback work.
+- Security controls are enforced on the backend.
+- Database migrations execute correctly.
+- API documentation is available.
+- Automated tests pass.
+- Android debug and release builds succeed.
+- Backend builds, tests, and starts successfully.
+- No critical placeholder features or unresolved runtime crashes remain.
+
+## Final delivery report
+
+When implementation is complete, provide:
+
+1. Complete Android project structure.
+2. Complete Ktor backend structure.
+3. Database schema and migration files.
+4. API endpoint documentation.
+5. Nexconn Chat SDK integration report.
+6. Nexconn Call SDK integration report.
+7. FCM configuration instructions.
+8. Environment variable documentation.
+9. Docker setup instructions.
+10. Android build and deployment instructions.
+11. Test execution results.
+12. Remaining external configuration requirements, if any.
+
+**Final objective: Deliver a fully functional, maintainable, secure, production-ready native Android social media platform using Kotlin, Jetpack Compose, Ktor, PostgreSQL, and the official Nexconn Chat and Call SDKs.**
+
+html/css code for the screen:
+
+<!-- Profile - Leslie Alexander -->
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Profile - Leslie Alexander</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandYellow: '#FBC00E',
+            brandDark: '#121212',
+            surfaceMuted: '#F8F9FA',
+            subtleGray: '#8E8E93',
+            badgeBg: '#F3F4F6'
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    /* Mobile container constraint & custom scroll styling */
+    body {
+      background-color: #0b0c10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="p-0 sm:p-4">
+<!-- BEGIN: PhoneShellContainer -->
+<!-- Container mimicking iPhone viewport -->
+<div class="relative w-full max-w-[400px] h-[874px] bg-white rounded-[44px] overflow-hidden shadow-2xl flex flex-col justify-between border-[6px] border-[#1f2024]" data-purpose="mobile-frame">
+<!-- BEGIN: iOSStatusBar -->
+<header class="w-full pt-3 px-7 flex justify-between items-center z-30 select-none" data-purpose="status-bar">
+<!-- Time -->
+<span class="text-[15px] font-semibold tracking-tight text-black">9:41</span>
+<!-- Dynamic Island Mockup -->
+<div class="w-28 h-[26px] bg-black rounded-full flex items-center justify-end px-2 space-x-1.5 ml-2">
+<div class="w-2.5 h-2.5 rounded-full bg-[#151515] border border-neutral-800"></div>
+</div>
+<!-- System Icons -->
+<div class="flex items-center space-x-1.5 text-black">
+<!-- Cellular Signal Icon -->
+<svg class="w-4 h-3.5 fill-current" viewBox="0 0 17 12">
+<rect height="3" rx="0.5" width="2.5" x="0" y="9"></rect>
+<rect height="6" rx="0.5" width="2.5" x="4" y="6"></rect>
+<rect height="9" rx="0.5" width="2.5" x="8" y="3"></rect>
+<rect height="12" rx="0.5" width="2.5" x="12" y="0"></rect>
+</svg>
+<!-- Wifi Icon -->
+<svg class="w-4 h-3.5 fill-current" viewBox="0 0 16 12">
+<path d="M8 2.8C10.6 2.8 13 3.8 14.8 5.5L16 4.3C13.9 2.2 11.1 1 8 1 4.9 1 2.1 2.2 0 4.3L1.2 5.5C3 3.8 5.4 2.8 8 2.8ZM8 6.4C9.6 6.4 11.1 7.1 12.2 8.2L13.4 7C12 5.6 10.1 4.7 8 4.7 5.9 4.7 4 5.6 2.6 7L3.8 8.2C4.9 7.1 6.4 6.4 8 6.4ZM8 10C8.8 10 9.5 10.7 9.5 11.5S8.8 13 8 13 6.5 12.3 6.5 11.5 7.2 10 8 10Z"></path>
+</svg>
+<!-- Battery Icon -->
+<div class="w-5 h-2.5 border border-black rounded-[3px] p-[1px] flex items-center">
+<div class="w-full h-full bg-black rounded-[1px]"></div>
+</div>
+</div>
+</header>
+<!-- END: iOSStatusBar -->
+<!-- Scrollable Content Area -->
+<main class="flex-1 overflow-y-auto no-scrollbar pb-24" data-purpose="scrollable-content">
+<!-- BEGIN: NavigationHeader -->
+<nav class="flex items-center justify-between px-6 pt-3 pb-2" data-purpose="top-nav-bar">
+<!-- Back Button -->
+<button aria-label="Go back" class="w-10 h-10 -ml-2 flex items-center justify-center text-black" type="button">
+<svg class="w-6 h-6 stroke-[2.2] stroke-current" fill="none" viewBox="0 0 24 24">
+<path d="M15.75 19.5L8.25 12l7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Screen Title -->
+<h1 class="text-[19px] font-bold text-neutral-900 tracking-tight">Profile</h1>
+<!-- Notification Bell Icon with Dot -->
+<button aria-label="Notifications" class="w-10 h-10 -mr-2 rounded-full flex items-center justify-center text-neutral-800 relative hover:bg-neutral-100 transition-colors" type="button">
+<svg class="w-5 h-5 fill-none stroke-[2] stroke-current" viewBox="0 0 24 24">
+<path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+</button>
+</nav>
+<!-- END: NavigationHeader -->
+<!-- BEGIN: ProfileDetailsHeader -->
+<section class="mt-4 px-6" data-purpose="profile-summary">
+<!-- Avatar and Metrics Row -->
+<div class="flex items-center justify-between px-2">
+<!-- Followers Count -->
+<div class="text-left w-20">
+<div class="text-[22px] font-extrabold text-neutral-900 tracking-tight leading-none">2.5M</div>
+<div class="text-[12px] text-neutral-400 font-medium mt-1">Followers</div>
+</div>
+<!-- Centered Profile Avatar -->
+<div class="relative">
+<div class="w-[104px] h-[104px] rounded-full overflow-hidden bg-neutral-100 p-[2px]">
+<img alt="Leslie Alexander" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4hB6YTXTtKBd9muX0CAzyjPd-TkRi8gB5aBOvMq6-f9L9lG7xEV6WqBrJ0IjZ2q8jCozWyNiQTQ9N1W5z812M7cWQCadlEPe5ohfuAJeDhUYvab8tNJTr1sctR23ckRU95EHcRBWtYwR2YrqwCmMttd6As758QgNBW1KKAqYdHVErA0QQ13eDcebxX4AdjTOCvzj8gCuXsjMdA6pzcGgN8mrsqO4NfjhYTVgNrFA">
+</div>
+</div>
+<!-- Following Count -->
+<div class="text-right w-20">
+<div class="text-[22px] font-extrabold text-neutral-900 tracking-tight leading-none">120</div>
+<div class="text-[12px] text-neutral-400 font-medium mt-1">Following</div>
+</div>
+</div>
+<!-- Name and Username -->
+<div class="text-center mt-3.5">
+<h2 class="text-[19px] font-extrabold text-neutral-900 leading-tight">Leslie Alexander<span class="inline-flex items-center ml-1.5 align-middle text-[#FBC00E]"><svg class="w-[18px] h-[18px] fill-[#FBC00E] shrink-0" viewBox="0 0 24 24"><path d="M12 2l2.4 2.1 3.2-.5 1.2 3 3 1.2-.5 3.2 2.1 2.4-2.1 2.4.5 3.2-3 1.2-1.2 3-3.2-.5-2.4 2.1-2.4-2.1-3.2.5-1.2-3-3-1.2.5-3.2-2.1-2.4 2.1-2.4-.5-3.2 3-1.2 1.2-3 3.2.5L12 2zm-1.8 13.4l6.3-6.3-1.4-1.4-4.9 4.9-2.1-2.1-1.4 1.4 3.5 3.5z" fill="#FBC00E"></path><path d="M10.2 15.4l-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3z" fill="#ffffff"></path></svg></span></h2>
+<p class="text-[13px] text-neutral-400 font-medium mt-0.5">@leslie_alex007</p>
+</div>
+</section>
+<!-- END: ProfileDetailsHeader -->
+<!-- BEGIN: TabSelector -->
+<section class="mt-5 px-5" data-purpose="content-tabs"><div class="flex items-center justify-between space-x-3 bg-neutral-100/80 p-1.5 rounded-full border border-neutral-200/60">
+<!-- Inactive Tab: Post -->
+<button class="flex-1 py-2.5 px-4 rounded-full flex items-center justify-center space-x-2 text-neutral-600 font-semibold text-[14px] hover:text-neutral-900 active:scale-95 transition-all duration-200" type="button">
+<span class="">Post</span>
+<span class="text-[11px] font-semibold text-neutral-500 bg-white px-2 py-0.5 rounded-full shadow-xs border border-neutral-200/50">25</span>
+</button>
+<!-- Active Tab: Moments -->
+<button class="flex-1 py-2.5 px-4 rounded-full bg-[#ffc700] flex items-center justify-center space-x-2 text-neutral-950 font-bold text-[14px] shadow-sm active:scale-95 transition-all duration-200 tracking-tight" type="button">
+<span class="">Moments</span>
+<span class="text-[11px] font-bold text-white bg-black/90 px-2 py-0.5 rounded-full inline-flex items-center justify-center shadow-xs leading-none">34</span>
+</button>
+</div></section>
+<!-- END: TabSelector -->
+<!-- BEGIN: DriftVideoBanner -->
+<section class="mt-4 px-5" data-purpose="drift-summary-card">
+<div class="bg-[#F8F9FA] rounded-[24px] p-3 flex items-center justify-between border border-neutral-100/60">
+<div class="flex items-center space-x-3">
+<!-- Overlapping Avatars -->
+<div class="flex -space-x-2.5 items-center pl-1">
+<img alt="Avatar 1" class="w-8 h-8 rounded-full border-2 border-white object-cover shadow-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOTy4_r3zATPn-LvGngQ6SuNdz8OWDISeYSSgdnf7okeofH145DC7qOGAiiWVpbDc_27LnO4a1G8Mc5g5LrkvjeeKtTU9AqGnY6v9I4b4sNXLFAdscUKvqhttDZ3vfna2bNzMbo3LrIhGxu7pc9SWpJ2dvyCChBy3zhOituRIS6YyPZHntFVmIMhn5aQXxMTQXvzB_P1Rf02VoHXF2OTpUsP7XiIGCgFMsdYVaonk">
+<img alt="Avatar 2" class="w-8 h-8 rounded-full border-2 border-white object-cover shadow-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7pj69oTp0MpMnCV7zeMawlxPGEPbPrR1tX2RkylWjGtrGm8VKN8st7dqJ8Il74Qsielm3Qa73jOeI-5VDPcuTF22CCbOJorswO_oLFtUBy6xuzYTHXEqt-RfFGrBPmFKuqz1putvICK6_TK-ddQE2FRb6irLIuQw-adVNJAqREiNxdARXyA3lk7fNcyrcG-ogmqWi--JBsUtKR7yPIm4PPwZLhjIexLnNw5kJ6cI">
+<img alt="Avatar 3" class="w-8 h-8 rounded-full border-2 border-white object-cover shadow-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKmqFgxWDvxbw8ycAXdH9xwzy_Bkg_XspKe0-OWShHv5suhXhFBpNiiTABKz5XSWmKor2jnbBf6BlDiAZiH0KKcIbkOJ17MZEiI2QZL_maIX5GnNTOu8ROixweSh1WM-SZYxPSqyOckSXCgQReTBIXm_wyJ1BZJZ_Cf0olWhmxR0Z0bIzW0yRJawjJ0-V5wlrPiQJADvruOvox1Dc06ZHTcJijzFe4yDCYShvTKJ8">
+<img alt="Avatar 4" class="w-8 h-8 rounded-full border-2 border-white object-cover shadow-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzajOBPHEIOJ9yzdMvFRjjJ3WDMhHFADUzvIZSswL6MKQQElWCd5v927wpGfN8FLF0PzYLgbSRY2Z5jQmzuTNMewnrlgBHGQ6xFN4oRIEXkf9aHj_UKitRFkAwLJOrbTmL5wcvmutfdwDCfQu6srZNxSKqIVMtw3i0k2B3jZa1B6LetEtbbi9hOw93KT84w8mMorA47RoFjxZ2w4aFPOeEwlravllGgsDxm4HM_8s">
+</div>
+<!-- Text Info -->
+<div class="leading-tight">
+<div class="text-[13px] font-bold text-neutral-900 leading-tight">24 videos</div>
+<div class="text-[11px] text-neutral-400 font-medium">in your drift</div>
+</div>
+</div>
+<!-- Call to action button -->
+<button class="bg-white px-4 py-2 rounded-full text-[12px] font-bold text-neutral-800 border border-neutral-200/60 shadow-xs hover:bg-neutral-50 transition-colors" type="button">
+            Take a look
+          </button>
+</div>
+</section>
+<!-- END: DriftVideoBanner -->
+<!-- BEGIN: MediaReelsGrid -->
+<section class="mt-4 px-5" data-purpose="reels-grid">
+<div class="grid grid-cols-3 gap-2.5">
+<!-- Card 1: Guy jumping/dancing in sportswear -->
+<div class="relative aspect-[3/4.6] rounded-[18px] overflow-hidden bg-neutral-200 group cursor-pointer shadow-xs">
+<img alt="Reel 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcs1r11_-PsNYkykmhy8MnbSvZGvmMM41pGjs_qyxvzRn6x4KH62W4B9wfTiVIWbOvjKq2jxpQsTmyAYWMexGuxeTmDwQtmrGBlJJu2ghaCRAbtSz66FY1wYVg1Ru1obVTTtQbcgjoOpMyocSExUAXSy2AZrtkvan4A1PVcepyfIIjKOdMqsDryjSShBFH0K_xOgMhf_tFNarxYhi7peXQXcRHURjb43NQoCa8exw">
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Views badge -->
+<div class="absolute bottom-2.5 left-2.5 flex items-center space-x-1 text-white text-[11px] font-semibold tracking-tight">
+<svg class="w-3 h-3 fill-current" viewBox="0 0 24 24">
+<path d="M8 5v14l11-7z"></path>
+</svg>
+<span class="">20.5K</span>
+</div>
+</div>
+<!-- Card 2: Guy in bomber jacket & neon yellow shorts -->
+<div class="relative aspect-[3/4.6] rounded-[18px] overflow-hidden bg-neutral-200 group cursor-pointer shadow-xs">
+<img alt="Reel 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAT9ZGnCGqpcRWZVDQBt6SuZX2MEi_8aYFwElXhCAug4_cyFrNviqgLcnYYdygzqU4bOGJYUSlO6NY3Sp0p_1n86jYxwBQfcEBdab8u8b9yRHpo4Lx-jPsY58t72d8zGBobRshGGfyFoIrLGQjRCRga54ro6hZed5AAGpdiguBseyVgEdjjV2h2DzNEVFbbnArYNJK43YaMTNZGlHpLdOmJvZohgtgt8valmtYAM7c">
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Views badge -->
+<div class="absolute bottom-2.5 left-2.5 flex items-center space-x-1 text-white text-[11px] font-semibold tracking-tight">
+<svg class="w-3 h-3 fill-current" viewBox="0 0 24 24">
+<path d="M8 5v14l11-7z"></path>
+</svg>
+<span class="">45.9K</span>
+</div>
+</div>
+<!-- Card 3: Guy in long white coat -->
+<div class="relative aspect-[3/4.6] rounded-[18px] overflow-hidden bg-neutral-200 group cursor-pointer shadow-xs">
+<img alt="Reel 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUwh22gzQ9vnOsHuNiEMspcwIcI4eAgahf_JhZG4EIwRU8cft2cX8rYwWb6P7pQRmxKt2KuNCDMtjo1EL6z-xLpiOFcUjEsQh_1qZAPVRfigSw_YMIf3lu9bU4011fUbGPfS98FAaP3r2mFG7DYaCilDxky-eVUsXH11ovRxPIHJpV-sXm__htOQD8CUV91TlkuxzjkHWs4UiJ1vKwo8A46B-1p9jruxLbspCF5xQ">
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Views badge -->
+<div class="absolute bottom-2.5 left-2.5 flex items-center space-x-1 text-white text-[11px] font-semibold tracking-tight">
+<svg class="w-3 h-3 fill-current" viewBox="0 0 24 24">
+<path d="M8 5v14l11-7z"></path>
+</svg>
+<span class="">534.4K</span>
+</div>
+</div>
+<!-- Second Row Preview: Peeking items -->
+<div class="relative aspect-[3/4.6] rounded-[18px] overflow-hidden bg-neutral-200 group cursor-pointer shadow-xs">
+<img alt="Reel 4" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe5UCpyIP_S4jV-FtIQK31izbFAWqjWlJB35fC4UtspBJedFDd2vsouTH2VIumzrAwzapkxS7nbYA0xEpm_K89O82aCUIvBiQzv2aS6f7Ql2tlUk3JJQ_sTwPooy9MWNvUtd8FqwJiTK1TnVCsURgd3z5JQhxnUTPW6v0Na1YCoOX1dkw9KBWvDrww1w4VjiWEvfDD8CDofWXTO4SEYIUh2fzhn2iWJ5I_OC2p_zU">
+</div>
+<div class="relative aspect-[3/4.6] rounded-[18px] overflow-hidden bg-neutral-200 group cursor-pointer shadow-xs">
+<img alt="Reel 5" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBYDA3TZ7QK5m0SOGcQqEsaKe5uEaH1V9PqwvinHNsbfWMPQsxd4hrE1hJJxKxUROyRpqaZq4t8nzCEWExBlZzgw11R3NuXzjcubahCLW-yGrjLWg_JIXe-KHmcdYvjKesGgNdnAgaV7zoOfh_LmZgj7uDL6C6UcZj_L8h8USql1hj--EkDg_Geemul0RVMW89kTr-OgJvmoOkvqo_ZenUAifiN86UKaiY3XKmlrc">
+</div>
+<div class="relative aspect-[3/4.6] rounded-[18px] overflow-hidden bg-neutral-200 group cursor-pointer shadow-xs">
+<img alt="Reel 6" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARBgBxfD3cpzc1qDJXYHuNnAIk8Dw_Sbo4kpRTyrq8Ms7-tzqUJBUXTYNPtK9AMXlimXAl7j7dk8fO3jhFQHTSTZdxWtbYp8nHTR3xk4BZaJNDEqXOOKUaX-NhE1kyN_wkg9i_Bem08fnL34ntvUpFc4VXXEIkIJOcEHQZWrxMN_J9gaP-m66fTo24XR2PfNANV8liBXaYoIwm7lrVQPkprb8UQ5iJERkq-4anTPM">
+</div>
+</div>
+</section>
+<!-- END: MediaReelsGrid -->
+</main>
+<!-- BEGIN: FloatingBottomNavigation -->
+<footer class="absolute bottom-4 left-5 right-5 z-40 pointer-events-auto" data-purpose="bottom-navigation-bar">
+<div class="bg-white/95 backdrop-blur-md rounded-[32px] px-6 py-2.5 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.12)] border border-neutral-100">
+<!-- Home Button -->
+<button aria-label="Home" class="p-2 text-neutral-800 hover:text-black transition-colors" type="button">
+<svg class="w-6 h-6 stroke-[1.8] stroke-current fill-none" viewBox="0 0 24 24">
+<path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Compass / Explore Button -->
+<button aria-label="Explore" class="p-2 text-neutral-400 hover:text-black transition-colors" type="button">
+<svg class="w-6 h-6 stroke-[1.8] stroke-current fill-none" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="9"></circle>
+<polygon fill="currentColor" fill-opacity="0.2" points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+</svg>
+</button>
+<!-- Center Yellow Plus Button -->
+<button aria-label="Create New Post" class="w-12 h-12 rounded-full bg-[#FBC00E] flex items-center justify-center text-neutral-900 shadow-md hover:scale-105 active:scale-95 transition-all" type="button">
+<svg class="w-6 h-6 stroke-[2.5] stroke-current" fill="none" viewBox="0 0 24 24">
+<path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Chat Bubble Button -->
+<button aria-label="Pod" class="p-2 text-neutral-400 hover:text-black transition-colors" type="button">
+<svg class="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="11" r="2.5"></circle>
+  <path d="M12 13.5V20"></path>
+  <path d="M7.75 7.25a6 6 0 0 0 0 7.5"></path>
+  <path d="M16.25 7.25a6 6 0 0 1 0 7.5"></path>
+  <path d="M5 4.5a10 10 0 0 0 0 13"></path>
+  <path d="M19 4.5a10 10 0 0 1 0 13"></path>
+</svg>
+</button>
+<!-- Profile Tab (Active) -->
+<button aria-label="Profile" class="p-2 relative flex flex-col items-center text-neutral-900" type="button">
+<svg class="w-6 h-6 stroke-[2] stroke-current fill-none" viewBox="0 0 24 24">
+<path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="w-4 h-[2.5px] bg-[#FBC00E] rounded-full mt-0.5"></span>
+</button>
+</div>
+</footer>
+<!-- END: FloatingBottomNavigation -->
+<!-- Home Indicator -->
+<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-neutral-300 rounded-full z-50 pointer-events-none"></div>
+</div>
+<!-- END: PhoneShellContainer -->
+
+
+
+
+
+
+
+
+</body></html>
+
+<!-- Social Feed - For You -->
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Feed - Social App</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            appYellow: '#F9D100',
+            appYellowHover: '#E5C000',
+            appDark: '#121212',
+            appGrayText: '#9E9EA7',
+          },
+          boxShadow: {
+            'floating-dock': '0 10px 30px -5px rgba(0, 0, 0, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scroll">
+    /* Hide scrollbar for clean horizontal story swipe */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-0 sm:p-4 text-appDark select-none">
+<!-- BEGIN: MobileFrameContainer -->
+<div class="w-full max-w-[393px] h-[852px] bg-white rounded-[48px] shadow-2xl relative overflow-hidden flex flex-col border-[6px] border-black" data-purpose="mobile-frame">
+<!-- BEGIN: iOSStatusBar -->
+<header class="w-full pt-3 px-7 flex justify-between items-center z-50 shrink-0" data-purpose="status-bar">
+<!-- Time -->
+<span class="font-bold text-[15px] tracking-tight">9:41</span>
+<!-- Dynamic Island / Sensor Notch Placeholder -->
+<div class="w-28 h-6 bg-black rounded-full mx-auto -mt-1 flex items-center justify-end pr-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-[#0d141e]/70 border border-gray-800"></div>
+</div>
+<!-- System Icons -->
+<div class="flex items-center space-x-1.5">
+<!-- Cellular Signal -->
+<svg class="w-4 h-3.5 fill-current" viewBox="0 0 17 12">
+<rect height="4" rx="0.7" width="2.5" x="0" y="8"></rect>
+<rect height="6" rx="0.7" width="2.5" x="4" y="6"></rect>
+<rect height="9" rx="0.7" width="2.5" x="8" y="3"></rect>
+<rect height="11.5" rx="0.7" width="2.5" x="12" y="0.5"></rect>
+</svg>
+<!-- Wi-Fi -->
+<svg class="w-4 h-3.5 fill-current" viewBox="0 0 16 12">
+<path clip-rule="evenodd" d="M8 2.5C10.7 2.5 13.1 3.6 14.8 5.3L16 4.1C13.9 2 11.1 0.7 8 0.7C4.9 0.7 2.1 2 0 4.1L1.2 5.3C2.9 3.6 5.3 2.5 8 2.5ZM8 6C9.8 6 11.4 6.8 12.5 8L13.7 6.8C12.2 5.3 10.2 4.4 8 4.4C5.8 4.4 3.8 5.3 2.3 6.8L3.5 8C4.6 6.8 6.2 6 8 6ZM8 9.5C6.9 9.5 6 10.4 6 11.5C6 11.8 6.1 12 6.2 12.2L8 14L9.8 12.2C9.9 12 10 11.8 10 11.5C10 10.4 9.1 9.5 8 9.5Z" fill-rule="evenodd"></path>
+</svg>
+<!-- Battery Icon -->
+<div class="w-5 h-2.5 border border-black rounded-[3px] p-[1px] flex items-center relative">
+<div class="w-full h-full bg-black rounded-[1.5px]"></div>
+<div class="w-[1.5px] h-1 bg-black absolute -right-[2.5px] rounded-r-sm"></div>
+</div>
+</div>
+</header>
+<!-- END: iOSStatusBar -->
+<!-- BEGIN: TopNavigationHeader -->
+<nav class="px-5 pt-3 pb-2 flex justify-between items-center shrink-0" data-purpose="top-navigation">
+<!-- Tabs (Following / For You) -->
+<div class="flex items-center space-x-6 text-[19px]">
+<button class="font-semibold text-appGrayText transition-colors duration-200 hover:text-black">
+          Following
+        </button>
+<div class="relative flex flex-col items-center">
+<button class="font-bold text-appDark">
+            For You
+          </button>
+<!-- Yellow Active Indicator Line -->
+<span class="absolute -bottom-1.5 w-9 h-[3px] bg-appYellow rounded-full"></span>
+</div>
+</div>
+<!-- Circular Yellow Search Button -->
+<button aria-label="Search" class="w-11 h-11 bg-appYellow hover:bg-appYellowHover rounded-full flex items-center justify-center shadow-sm transition-transform active:scale-95" data-purpose="search-button">
+<svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" viewBox="0 0 24 24">
+<circle cx="11" cy="11" r="7"></circle>
+<line x1="21" x2="16.5" y1="21" y2="16.5"></line>
+</svg>
+</button>
+</nav>
+<!-- END: TopNavigationHeader -->
+<!-- BEGIN: ScrollableFeedContent -->
+<main class="flex-1 overflow-y-auto no-scrollbar pb-24" data-purpose="feed-scroll-container">
+<!-- BEGIN: StoriesSection -->
+<section class="mt-2.5" data-purpose="stories-section">
+<div class="px-5 mb-2.5">
+<h2 class="text-base font-bold text-appDark tracking-tight">Stories</h2>
+</div>
+<!-- Horizontal Story Cards Scroll List -->
+<div class="flex space-x-2.5 overflow-x-auto no-scrollbar px-5 pb-1">
+<!-- Story Card 1: Guy Hawkins -->
+<article class="relative w-[114px] h-[162px] shrink-0 rounded-[20px] overflow-hidden group cursor-pointer shadow-sm" data-purpose="story-card">
+<img alt="Guy Hawkins" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkKV1TnBBKW0yQoh2xwZ8Z7S5Hxt_eVXRCLK7lztm6wtbXhYWIMKpC8pFDXRKzcsskbwQ6jJIkxCuBzsbyG_5Zfp1wkVtSqoD_5t_diRTce20eP_j8cK7ClDlabUt37zbUYwt7fFGqUCcJc31K4xxOgLc_qvfDiOjkMyLxUpUmdLPKeUHMiVL22dpk2gqnspXBU8ayYWRr_9873OWbmlJ-ClUMtIiALta0meiCPHE">
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
+<!-- Top Live Pill Badge -->
+<div class="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-md rounded-full px-2 py-0.5 flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+<span class="text-[9px] font-semibold text-white tracking-wider">Live</span>
+<span class="text-[8px] text-gray-300 font-medium ml-0.5">20.5K</span>
+</div>
+<!-- Bottom User Info -->
+<div class="absolute bottom-2 left-2 right-2 flex items-center space-x-1.5">
+<div class="w-5 h-5 rounded-full p-[1px] bg-gradient-to-tr from-appYellow to-amber-500 shrink-0">
+<img alt="Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCV8MiViMEnUjZAD6QeqT9OTHdMCVcsLPg56U9gdg0g3we49UJo8vIx4XX1zdRJdIJshXsFHPK0SHZ0_LaOCs12nrEOGDlH6nm42lqgr17f0sgIy_gKAzko6D46DhbIwtl9Alh801xNJD7PcsTa_QD1o-LjBgzTZmWufTMd5rMtF_2lNhQGh2iRdmgZE3NGVJ8QyM35kVWZRu_dZmJCRurZKtl6hqjIZ_7kkj_CtWM">
+</div>
+<p class="text-[10px] font-semibold text-white truncate drop-shadow-sm">Guy Hawkins</p>
+</div>
+</article>
+<!-- Story Card 2: Robert Fox -->
+<article class="relative w-[114px] h-[162px] shrink-0 rounded-[20px] overflow-hidden group cursor-pointer shadow-sm" data-purpose="story-card">
+<img alt="Robert Fox" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCamo4OsTZ3yu6Lw_WLIG0a4GZnfJgklEkp_MXUtIajvZRh5-jlpGoiCPD8GI8Fnd_oREP2jfvnAAL3bvYU2CJrAxReO3UMO9tdW1AyWjGEXiTEBEqNH2-5ph7W1fOmf8HSr0ZJTkXmum5UBWi-9xMh8qLCZPZGDBhi-SSMKZI-cZtU4NtM6abZZp2GnFvZ6J2DwqCEy4FtlaCuyVpa9VkNkWTqiX4Nn7Lh_Y7mkSE">
+<div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
+<!-- Top Premiere Pill Badge -->
+<div class="absolute top-2.5 left-2.5 bg-appYellow rounded-full px-2 py-0.5 flex items-center">
+<span class="text-[9px] font-bold text-black tracking-tight">Premiere</span>
+</div>
+<!-- Bottom User Info -->
+<div class="absolute bottom-2 left-2 right-2 flex items-center space-x-1.5">
+<div class="w-5 h-5 rounded-full p-[1px] bg-gradient-to-tr from-appYellow to-amber-500 shrink-0">
+<img alt="Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkVUWOU-jdjPhub91--eQmyutfqXOHFFi6p5MeuMgl-AvPKsGueEyqIdaAePGNTtzvtx1LTA0QBLxx42e4mBg4y_AVDpAJjUgLyL3JSPTitIfivGWHrZyvpvvmTt2pOpblnS_nHooehVSqwLfPNFWryQ5Fw6j_kItIomN6d8x6CGJ1lSqO_UGKb_M5t2pFP4gPHmcN8hKNAnhoxA9eWQi5x9fM7h9PMX6df32mBDo">
+</div>
+<p class="text-[10px] font-semibold text-white truncate drop-shadow-sm">Robert Fox</p>
+</div>
+</article>
+<!-- Story Card 3: Bessie Cooper -->
+<article class="relative w-[114px] h-[162px] shrink-0 rounded-[20px] overflow-hidden group cursor-pointer shadow-sm" data-purpose="story-card">
+<img alt="Bessie Cooper" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAsn4tC6GPHlParTl7mtkpbh6g7lf9DMoZZQzUNzrRAYcIIT06qjOSLv6dZ0FdhcsPKVrvrwNrz6nGzRpXtQzLexCiRxbn03We6OUXmVbe25H-h_JTs03joXCJrnx5E7i_5BwS7b5x6k2WRv8FYr2-iq8x8d7BIy3K-IPIDn_LeOX7WVKnwGLFs7whxc4GIn-ODeC_J0CkpoapEwuNu5JF0DMwYLtoZZnMHO9GX_A">
+<div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
+<!-- Top Live Pill Badge -->
+<div class="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-md rounded-full px-2 py-0.5 flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+<span class="text-[9px] font-semibold text-white tracking-wider">Live</span>
+<span class="text-[8px] text-gray-300 font-medium ml-0.5">34.6K</span>
+</div>
+<!-- Bottom User Info -->
+<div class="absolute bottom-2 left-2 right-2 flex items-center space-x-1.5">
+<div class="w-5 h-5 rounded-full p-[1px] bg-gradient-to-tr from-appYellow to-amber-500 shrink-0">
+<img alt="Avatar" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDj9_3YMJWe04EOkjAQ2eEu1zm0P-McgQYLNOaDtZf2gdJw4ICVpto6foatmUCNQMxkuriNcUK_skQt_UdcpyrWXAr5dFLnFW6I6JZEpg1a-tsxV-DlLK36tXRPw8USha6b4bbN2YU5FpJF_BSrGj8kCkNsJE7n3q5Se-7K_CnoTE5Fh07wi11XWDIhfmiG52mVwlWFVaaAD25Nz9tPyjBZ2IiCQi_YwVRHj4D9Q7w">
+</div>
+<p class="text-[10px] font-semibold text-white truncate drop-shadow-sm">Bessie Coo</p>
+</div>
+</article>
+</div>
+</section>
+<!-- END: StoriesSection -->
+<!-- BEGIN: TrendingSection -->
+<section class="mt-4 px-5" data-purpose="trending-section">
+<div class="mb-2.5">
+<h2 class="text-base font-bold text-appDark tracking-tight">Trending</h2>
+</div>
+<!-- Featured Trending Feed Post 1 -->
+<article class="relative w-full h-[335px] rounded-[26px] overflow-hidden shadow-sm group" data-purpose="trending-card">
+<!-- Background Editorial Image -->
+<img alt="Editorial Fashion Post" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASFsjCWpGzLYQz1ZYM1bheQFSRbPDiiXyP0HKodoStzUdJZK8oTSuQ3ZAm6Ji3GCRC5sq8jMxlEZrhy92BjHq5SnRb3jtm7nCdQoPnEWoRYn8uaBcyo0OXekpxxBxS01w3LOkx28JEN22u6f5a83QvqRsJhY3b84QFUh46vqXqKgELJBYQSBga3g0GibQ86t947I3_P4fNP4_KxdiG3Qoq0yN4sSsUKd-eWuJzDxg">
+<!-- Dark Gradient Overlays for top author details and bottom stats bar -->
+<div class="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/60 via-black/20 to-transparent"></div>
+<div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<!-- Top Author Info Row -->
+<div class="absolute top-3.5 left-3.5 flex items-center space-x-2.5 z-10">
+<div class="w-10 h-10 rounded-full border-2 border-white/60 overflow-hidden shadow-sm">
+<img alt="Savannah Nguyen" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbVephvpZR25GYcqCPcF4k8lmCHq3cQJ3Mwond7ogjeYEPhKjZY4-55A8debRp_1Bjte7FFSApLoo61Ap5tkPNBG0OZjv0G5MZwRh8efCXNsQ29FzBxJaWqz2f2Kw5x9HIAmYXd0cVJtkcPHhrejEor9zQKxqTFJ7fegdqg1udMrF01kYxu3UtmPgE5EkdigR9TPse2_cKmyYRuwi4e6zvJKWuCaljtLFefsZ9mYc">
+</div>
+<div>
+<div class="flex items-center space-x-1"><h3 class="text-sm font-bold text-white leading-tight drop-shadow-md">Savannah Nguyen</h3><svg class="w-3.5 h-3.5 shrink-0 fill-appYellow text-black drop-shadow-sm" viewBox="0 0 24 24"><path d="M12 2l2.4 2.1 3.2-.4 1.2 3 3 1.2-.4 3.2 2.1 2.4-2.1 2.4.4 3.2-3 1.2-1.2 3-3.2-.4L12 22l-2.4-2.1-3.2.4-1.2-3-3-1.2.4-3.2L0.5 12.5l2.1-2.4-.4-3.2 3-1.2 1.2-3 3.2.4L12 2z" fill="#F9D100"></path><path d="M9.5 12.5l2 2 4.5-4.5" fill="none" stroke="#121212" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg></div>
+<p class="text-xs text-white/80 font-medium drop-shadow-sm">@savannah_nguyen</p>
+</div>
+</div>
+<!-- Bottom Engagement Stats Glassmorphic Pill -->
+<div class="absolute bottom-3.5 left-3.5 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-3.5 py-1.5 flex items-center space-x-4 text-white text-xs font-semibold">
+<!-- Likes -->
+<button class="flex items-center space-x-1.5 hover:text-appYellow transition-colors">
+<svg class="w-4 h-4 text-white fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24">
+<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="">120K</span>
+</button>
+<!-- Comments -->
+<button class="flex items-center space-x-1.5 hover:text-appYellow transition-colors">
+<svg class="w-4 h-4 text-white fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="">96K</span>
+</button>
+<!-- Shares -->
+<button class="flex items-center space-x-1.5 hover:text-appYellow transition-colors">
+<svg class="w-4 h-4 text-white fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="">36K</span>
+</button>
+</div>
+</article>
+<!-- Second Trending Feed Post Teaser -->
+<article class="relative w-full h-[180px] rounded-[26px] overflow-hidden shadow-sm mt-3.5 bg-sky-200" data-purpose="secondary-post-preview">
+<img alt="Brooklyn Simmons Post" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYXcXEk_LzQKVAFLfrOPtP3p_O6dbMvB1u76Ffi4MeB0OcopU_UVJbN_GJkZb0vF7fhjb9KRG9LgQymTJ17xG3FmKijRa0HqSAYikiVffch6IpcgxXLu0FO0XBrkxb9pukTgYD7yKXayzptuHuK7GwmFWGOAEfth5bixrVfytdETq2BB1ziADKVA1w-MOcqCtNxPLPFPILZ63kUxqU4sVSSaZ-fEokFGj4NFAilLk">
+<div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent"></div>
+<div class="absolute top-3.5 left-3.5 flex items-center space-x-2.5 z-10">
+<div class="w-10 h-10 rounded-full border-2 border-white/60 overflow-hidden shadow-sm">
+<img alt="Brooklyn Simmons" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5jhNjOEvopHbZN3HDPAmrIiT7tjOZ5eFD9MutftWqeVdhylfXIC3cASf_8NdF-WPHtFn7_tG4m1LvR1VCzM0ikpSEn_JUj72l1Pz0-a-1asrwGlQi7phkyOdKg9i5UVcb40atEdvGGQqJM7OXodnzSH_6n8vICh00bo9NCOMxqpwObEy8Ww06uAt-V28-0uQqUo0BT92YxRE-pZHd_FnPq2zfkdok8hfdtxLFJOs">
+</div>
+<div>
+<h3 class="text-sm font-bold text-white leading-tight">Brooklyn Simmons</h3>
+<p class="text-xs text-white/80 font-medium">@brooklyn.sim007</p>
+</div>
+</div>
+</article>
+</section>
+<!-- END: TrendingSection -->
+</main>
+<!-- END: ScrollableFeedContent -->
+<!-- BEGIN: FloatingBottomNavigationBar -->
+<nav class="absolute bottom-5 inset-x-4 h-[64px] bg-white rounded-[32px] shadow-floating-dock flex items-center justify-between px-5 z-40 border border-gray-100" data-purpose="floating-bottom-dock">
+<!-- Tab 1: Home (Active) -->
+<button aria-label="Home Feed" class="relative flex flex-col items-center justify-center p-2 text-black transition-colors">
+<svg class="w-6 h-6 stroke-current fill-none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+</svg>
+<!-- Active Pill Line -->
+<span class="absolute -bottom-0.5 w-3.5 h-[2px] bg-black rounded-full"></span>
+</button>
+<!-- Tab 2: Compass / Explore -->
+<button aria-label="Explore" class="p-2 text-gray-500 hover:text-black transition-colors">
+<svg class="w-6 h-6 stroke-current fill-none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+</svg>
+</button>
+<!-- Tab 3: Center Yellow Add Action Button -->
+<button aria-label="Create Post" class="w-12 h-12 bg-appYellow hover:bg-appYellowHover rounded-full flex items-center justify-center shadow-md active:scale-95 transition-transform" data-purpose="create-post-button">
+<svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+<line x1="12" x2="12" y1="5" y2="19"></line>
+<line x1="5" x2="19" y1="12" y2="12"></line>
+</svg>
+</button>
+<!-- Tab 4: Messages / Notifications -->
+<button aria-label="Podcasts" class="p-2 text-gray-500 hover:text-black transition-colors"><svg class="w-6 h-6 stroke-current fill-none" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="11" r="2.5"></circle><path d="M12 13.5V20"></path><path d="M8.5 7.5C7.2 8.8 6.5 10.3 6.5 12c0 1.7.7 3.2 2 4.5"></path><path d="M15.5 7.5c1.3 1.3 2 2.8 2 4.5 0 1.7-.7 3.2-2 4.5"></path><path d="M5.5 4.5C3.3 6.7 2 9.5 2 12c0 2.5 1.3 5.3 3.5 7.5"></path><path d="M18.5 4.5c2.2 2.2 3.5 5 3.5 7.5 0 2.5-1.3 5.3-3.5 7.5"></path></svg></button>
+<!-- Tab 5: Profile -->
+<button aria-label="Profile" class="p-2 text-gray-500 hover:text-black transition-colors">
+<svg class="w-6 h-6 stroke-current fill-none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+<circle cx="12" cy="7" r="4"></circle>
+</svg>
+</button>
+</nav>
+<!-- END: FloatingBottomNavigationBar -->
+<!-- BEGIN: iOSHomeIndicatorBar -->
+<div class="absolute bottom-1.5 inset-x-0 flex justify-center pointer-events-none z-50" data-purpose="home-indicator">
+<div class="w-32 h-1 bg-black/80 rounded-full"></div>
+</div>
+<!-- END: iOSHomeIndicatorBar -->
+</div>
+<!-- END: MobileFrameContainer -->
+
+
+
+
+</body></html>
+
+<!-- Discover & Explore -->
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Discover &amp; Explore</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-surface-variant": "#4f4632",
+            "tertiary-container": "#ffbfbc",
+            "background": "#f9f9f9",
+            "primary": "#765b00",
+            "on-tertiary-container": "#ac1b2a",
+            "surface-tint": "#765b00",
+            "error-container": "#ffdad6",
+            "surface-container": "#eeeeee",
+            "surface-container-high": "#e8e8e8",
+            "tertiary-fixed": "#ffdad8",
+            "on-tertiary-fixed": "#410007",
+            "outline-variant": "#d2c5ab",
+            "inverse-on-surface": "#f0f1f1",
+            "surface": "#f9f9f9",
+            "on-primary": "#ffffff",
+            "surface-container-highest": "#e2e2e2",
+            "primary-fixed-dim": "#f5bf00",
+            "surface-variant": "#e2e2e2",
+            "secondary-container": "#e5e2e1",
+            "secondary": "#5f5e5e",
+            "tertiary": "#b52330",
+            "on-tertiary-fixed-variant": "#92001b",
+            "surface-dim": "#dadada",
+            "on-primary-fixed": "#251a00",
+            "on-error-container": "#93000a",
+            "inverse-primary": "#f5bf00",
+            "on-secondary-container": "#656464",
+            "surface-bright": "#f9f9f9",
+            "on-background": "#1a1c1c",
+            "secondary-fixed-dim": "#c8c6c5",
+            "tertiary-fixed-dim": "#ffb3b0",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#1c1b1b",
+            "on-surface": "#1a1c1c",
+            "on-primary-fixed-variant": "#594400",
+            "surface-container-low": "#f3f3f3",
+            "inverse-surface": "#2f3131",
+            "secondary-fixed": "#e5e2e1",
+            "on-tertiary": "#ffffff",
+            "primary-fixed": "#ffdf94",
+            "outline": "#81765f",
+            "on-primary-container": "#6e5400",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#474646",
+            "primary-container": "#ffc700"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "gutter": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "1.25rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "display-hero": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-caps": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-hero-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "display-hero": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "800"}],
+            "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+            "label-lg": ["14px", {"lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+            "headline-md": ["22px", {"lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+            "headline-lg": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-sm": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "body-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400"}],
+            "label-caps": ["11px", {"lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "700"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+            "display-hero-mobile": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "800"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-surface-container-high text-on-surface antialiased min-h-screen flex justify-center selection:bg-primary-container selection:text-on-surface">
+<!-- Mobile Device Frame Container -->
+<main class="w-full max-w-md bg-surface min-h-screen relative flex flex-col shadow-2xl overflow-x-hidden border-x border-outline-variant/20 pb-[6.5rem]">
+<!-- iOS Status Bar & Dynamic Island -->
+<header class="w-full pt-3 px-6 pb-1 flex items-center justify-between z-50 select-none bg-surface/90 backdrop-blur-md">
+<span class="font-label-lg text-label-lg text-on-surface font-bold tracking-tight">9:41</span>
+<!-- Dynamic Island Capsule -->
+<div class="w-28 h-6 bg-on-surface rounded-full flex items-center justify-end pr-2.5 space-x-1.5 shadow-sm">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-container-highest/30"></div>
+<div class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></div>
+</div>
+<!-- System Icons Cluster -->
+<div class="flex items-center space-x-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[17px]" data-icon="signal_cellular_alt">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[17px]" data-icon="wifi">wifi</span>
+<span class="material-symbols-outlined text-[19px]" data-icon="battery_full">battery_full</span>
+</div>
+</header>
+<!-- Top Navigation Anchor (Shared Components TopAppBar translated) -->
+<section class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md px-margin pt-2 pb-space-sm flex items-center justify-between">
+<!-- Segmented Tabs matching shared visual hierarchy -->
+<nav class="flex items-center space-x-5">
+<div class="relative pb-1">
+<button class="font-headline-md text-headline-md font-bold text-on-surface hover:opacity-80 transition-opacity">Discover</button>
+<div class="absolute bottom-0 left-0 right-0 h-[3px] bg-primary-container rounded-full"></div>
+</div>
+<button class="font-headline-md text-headline-md font-medium text-secondary hover:text-on-surface transition-colors pb-1">Explore</button>
+</nav>
+<!-- Action Cluster: Round Yellow Search + Glass Filter -->
+<div class="flex items-center space-x-2">
+<button aria-label="Search" class="w-10 h-10 rounded-full bg-primary-container text-on-surface flex items-center justify-center shadow-sm active:scale-95 transition-transform hover:opacity-90">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+</button>
+<button aria-label="Filters" class="w-10 h-10 rounded-full bg-surface-container text-on-surface flex items-center justify-center active:scale-95 transition-transform hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-[20px]" data-icon="tune">tune</span>
+</button>
+</div>
+</section>
+<!-- Scrollable Body Canvas -->
+<div class="flex-1 px-margin space-y-space-lg">
+<!-- SECTION 1: PEOPLE NEARBY / DISCOVERY MATCH STACK -->
+<section class="mt-2 space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">People Nearby</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-on-primary-container font-label-caps text-label-caps uppercase tracking-wider">Spotlight</span>
+</div>
+<button class="font-label-md text-label-md text-secondary hover:text-on-surface transition-colors flex items-center space-x-0.5">
+<span class="">2.4 km</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="near_me">near_me</span>
+</button>
+</div>
+<!-- Layered Dating Profile Card Stack -->
+<div class="relative w-full aspect-[4/5] max-h-[460px] select-none">
+<!-- Ambient Back Card Layer 2 -->
+<div class="absolute inset-x-5 top-5 bottom-0 bg-surface-container-highest/60 rounded-[2.25rem] scale-95 border border-outline-variant/30 transform translate-y-2 pointer-events-none"></div>
+<!-- Ambient Back Card Layer 1 -->
+<div class="absolute inset-x-2.5 top-2.5 bottom-0 bg-surface-container-lowest rounded-[2.25rem] scale-[0.98] border border-outline-variant/40 shadow-sm transform translate-y-1 pointer-events-none"></div>
+<!-- Primary Active Profile Card -->
+<article class="relative w-full h-full rounded-[2.25rem] overflow-hidden border border-surface-container-high shadow-lg bg-surface-container-lowest flex flex-col justify-between group">
+<!-- Hero Photo Canvas -->
+<img alt="Elena Vance Profile" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="High-fashion editorial candid portrait of an expressive stylish young woman in a chic oversized beige trench coat with amber tint sunglasses outdoors in soft natural daylight. Minimal clean architectural backdrop, warm golden skin tones, aesthetic cinematic depth of field matching modern editorial lifestyle photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCruz606L_4q3yklE3VVIynFNhB8doc0PO99x31G7fj02F62-8v-JjAd5WBT9LN604FdV2ekXMWzr7Aj380AUh6PpiiZ3FGjaOmjF8weqMTKLgjnxmi1WaxpOfjlQdOnI0cqtjvU89k3g34_5hDM3YShSaimStIw8tnqSNH1GtnqemSYK-Ewq-s9In1fQqq5RxgRjdlhT9WC5PVu6C50In6isgCv6RlQaP2UzD4WNk">
+<!-- High-Contrast Legibility Gradient -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none"></div>
+<!-- Top Floating Glass Badges -->
+<div class="relative z-10 p-4 flex items-center justify-between">
+<!-- Match Percentage Glass Capsule -->
+<div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/75 backdrop-blur-md border border-white/40 shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary" data-icon="favorite" data-weight="fill" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">98% Match</span>
+</div>
+<!-- Distance / Status Glass Pill -->
+<div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-white shadow-sm">
+<div class="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse"></div>
+<span class="font-label-caps text-label-caps tracking-wider uppercase text-white/90">Online now</span>
+</div>
+</div>
+<!-- Bottom Profile Details & Trait Chips -->
+<div class="relative z-10 p-5 space-y-3">
+<div>
+<div class="flex items-baseline space-x-2">
+<h3 class="font-headline-lg font-bold text-headline-lg text-white tracking-tight drop-shadow-sm">Elena Vance</h3>
+<span class="font-headline-md font-normal text-headline-md text-white/90">24</span>
+<span class="inline-flex items-center justify-center text-primary-container ml-0.5" title="Verified Creator"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="m8.6 22.5-1.9-3.2-3.6-.8.35-3.7L1 12l2.45-2.8-.35-3.7 3.6-.8 1.9-3.2L12 2.95 15.4 1.5l1.9 3.2 3.6.8-.35 3.7L23 12l-2.45 2.8.35 3.7-3.6.8-1.9 3.2-3.4-1.45zm2.35-6.85 5.65-5.65-1.4-1.45-4.25 4.25-2.15-2.15-1.4 1.4z"></path></svg></span>
+</div>
+<p class="font-body-md text-body-md text-white/80 flex items-center space-x-1 mt-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="work">work</span>
+<span class="">Fashion Stylist &amp; Photographer</span>
+</p>
+</div>
+<!-- Trait Chips -->
+<div class="flex flex-wrap gap-1.5 pt-0.5">
+<span class="px-2.5 py-1 rounded-full bg-white/25 backdrop-blur-md border border-white/25 text-white font-label-md text-label-md">🎵 Indie Pop</span>
+<span class="px-2.5 py-1 rounded-full bg-white/25 backdrop-blur-md border border-white/25 text-white font-label-md text-label-md">📸 Film Camera</span>
+<span class="px-2.5 py-1 rounded-full bg-white/25 backdrop-blur-md border border-white/25 text-white font-label-md text-label-md">☕ Oat Flat White</span>
+<span class="px-2.5 py-1 rounded-full bg-white/25 backdrop-blur-md border border-white/25 text-white font-label-md text-label-md">🎨 Bauhaus</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Tactile Floating Gesture Action Controls -->
+<div class="flex items-center justify-center space-x-5 pt-1 pb-2">
+<!-- Pass Button -->
+<button aria-label="Pass" class="w-13 h-13 w-[52px] h-[52px] rounded-full bg-surface-container-lowest border border-outline-variant/30 text-secondary shadow-md flex items-center justify-center active:scale-90 hover:text-on-surface hover:border-outline-variant transition-all">
+<span class="material-symbols-outlined text-[26px]" data-icon="close">close</span>
+</button>
+<!-- Super Star Action (Yellow Intent Halo) -->
+<button aria-label="Super Like" class="w-14 h-14 w-[56px] h-[56px] rounded-full bg-primary-container text-on-surface shadow-xl shadow-primary-container/40 flex items-center justify-center active:scale-90 hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-[28px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+<!-- Heart / Connect Action -->
+<button aria-label="Like &amp; Connect" class="w-13 h-13 w-[52px] h-[52px] rounded-full bg-surface-container-lowest border border-outline-variant/30 text-tertiary shadow-md flex items-center justify-center active:scale-90 hover:scale-105 hover:bg-tertiary-fixed transition-all">
+<span class="material-symbols-outlined text-[26px]" data-icon="favorite" data-weight="fill" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+</section>
+<!-- SECTION 2: DISCOVER CONTENT & TRENDING SPARKS -->
+<section class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">Trending Sparks</h2>
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+</div>
+<button class="font-label-md text-label-md font-bold text-on-surface hover:opacity-80 transition-opacity">View all</button>
+</div>
+<!-- Filter Chips Carousel -->
+<div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-1 -mx-margin px-margin">
+<button class="px-4 py-2 rounded-full bg-on-surface text-surface-container-lowest font-label-md text-label-md font-semibold whitespace-nowrap active:scale-95 transition-transform">🔥 Trending</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md whitespace-nowrap hover:bg-surface-container-high transition-colors active:scale-95">✨ New Sparks</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md whitespace-nowrap hover:bg-surface-container-high transition-colors active:scale-95">🎬 Reels</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md whitespace-nowrap hover:bg-surface-container-high transition-colors active:scale-95">🎨 Creative</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-on-surface font-label-md text-label-md whitespace-nowrap hover:bg-surface-container-high transition-colors active:scale-95">🎧 Audio Session</button>
+</div>
+<!-- "In Your Radar" Banner (Inspired by 'in your drift') -->
+<div class="p-3.5 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 flex items-center justify-between shadow-sm">
+<div class="flex items-center space-x-3">
+<!-- Overlapping Creator Avatars -->
+<div class="flex -space-x-2.5 overflow-hidden">
+<img alt="Creator avatar 1" class="inline-block h-8 w-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Portrait closeup avatar of a modern young creator wearing yellow beanie hat in vibrant warm sunlight smiling with effortless authenticity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXcaI_a8rdbatSHfmZNNrZwt9JfrKaqdcoEWH-twtAojhO-zJ2QYItQA65f2Rtd3hVV5zFuD4z-ug5-dpWU__PlzTE4_9kcqOEKneu5Sc4WbOKwrPoQO5JZfzuW1jmRjwdjivgWo7OPRrCWb03TSJeT-bt-ss0mK25f2-O6SpmgaSY6BjPcYKb1l1E7ilyRIknSUWD-MoRkh5r-cE53rGRboV1MhOttjN6i-UDmn0">
+<img alt="Creator avatar 2" class="inline-block h-8 w-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Portrait avatar of an edgy male model in vintage denim jacket looking into camera against a minimalist blue sky backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe6HaZGQCjCnzAt1FuBgr7z2jkSKqrG5QClk5u_t-w8U2XGAwoMhuZTVIdayCeOnAjRGEVlbql1BQPLjjovs77FCxmX5VaCyRFl3FEaQXqtwIa-PhuQHxC43nD2nr5MAkRsdxLFfSv34ce4X-C9GbuetPrk5T1j9cRKAPo0wf1Dh51S5e4F4IjH-MrG6sQO0OQjGxmVw4BFESTfvFcVRi29u1Eg1FLR3yPtg6g754">
+<img alt="Creator avatar 3" class="inline-block h-8 w-8 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Portrait avatar of an artistic young woman with stylish short bob haircut and colorful sweater in warm editorial lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBclhcgmwMXdmNYGybxC_-8AaUkf4kVqurc4V0xJc7tGcbcwf_ITdp7nGBjv9W96Cz8jIs-DZqIQbhuTO02DcHuak0EdKLyibHLUg5s_fjcX1qlCU0thJseNMkEe1NDWWeWspBz_Pcy2CW3UFlmtPk0sHxR3ih9vqjh6pBNFMGe5FIO_BhHn-tU6TULlsBQWhrc2lqbboEe753jqf3qomPmnC94reqNbaDCKEFR0Nc">
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface leading-tight">18 creator vibes</p>
+<p class="font-body-sm text-body-sm text-secondary">in your radar today</p>
+</div>
+</div>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md font-bold hover:bg-primary-container transition-colors active:scale-95">
+            Take a look
+          </button>
+</div>
+<!-- Editorial Discovery Asymmetrical Bento Grid -->
+<div class="grid grid-cols-2 gap-3 pt-1">
+<!-- Bento Tile 1: Streetwear & Fashion Lookbook -->
+<article class="relative aspect-[3/4] rounded-2xl overflow-hidden border border-outline-variant/20 shadow-sm group">
+<img alt="Trending Streetwear Lookbook" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Editorial urban street style fashion photography of two young men posing by a light blue wall wearing warm yellow blazer and textured rust red wool coat in crisp natural sunlight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzUaxvZ8AnCvVHg6ihcDbLJqYHl4aJBY6XCmAKcsGoQ7gfegRK3lzWhcvStLESAWkeIJDdrwRiVifu_Psk8S-xlSwXuWw3X8NSnA0941_ULepuOD_-bp2xjn0fnoLNZs1-EYhcE1Q6EKhJrThVLx0INHv2LlnGdMp6aXF38BO04jTnTr_r1fmX8WkDhUELD2XLkQ5ijW4v_X2THTomrT82xnIX1_45J3fc4CA6zdY">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+<!-- Live Badge Top Left -->
+<div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center space-x-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container"></div>
+<span class="font-label-caps text-label-caps text-white uppercase tracking-wider">Sparks</span>
+</div>
+<!-- Author & Stats Foot -->
+<div class="absolute bottom-2.5 inset-x-2.5 text-white">
+<div class="flex items-center space-x-1.5 mb-1">
+<img alt="Savannah" class="w-5 h-5 rounded-full object-cover ring-1 ring-white/60" data-alt="Close up face profile of a streetwear creative with dark baseball cap in neutral clean studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZF9LQxhZImsX6PzHVXA1ncbrVpTK4Fo9sJNZe5yhRIvamvSOdm9nun0uqzSiP3kKb7l-GvlbrAKXy0VxOr5v8oPkqWKUCYkrZnu3xSxq2T_NHzGe1J1jDpDctCsFZsT-HmhrCcFj333krykbeYxjPxokVkSzxRvPQ7i-nO8P4dXixyzmx5gXdgEqm7DclN0eo29VwODx1dhSiUKU9c-2kSBLfL4zlsJM3gvgFi1w">
+<span class="font-label-md text-label-md font-medium text-white/95 truncate">Savannah Nguyen</span><span class="inline-flex items-center justify-center text-primary-container flex-shrink-0" title="Verified Creator"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="m8.6 22.5-1.9-3.2-3.6-.8.35-3.7L1 12l2.45-2.8-.35-3.7 3.6-.8 1.9-3.2L12 2.95 15.4 1.5l1.9 3.2 3.6.8-.35 3.7L23 12l-2.45 2.8.35 3.7-3.6.8-1.9 3.2-3.4-1.45zm2.35-6.85 5.65-5.65-1.4-1.45-4.25 4.25-2.15-2.15-1.4 1.4z"></path></svg></span>
+</div>
+<div class="flex items-center justify-between text-white/80 font-body-sm text-body-sm">
+<span class="flex items-center space-x-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="favorite">favorite</span>
+<span class="">120K</span>
+</span>
+<span class="flex items-center space-x-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="play_arrow">play_arrow</span>
+<span class="">45.9K</span>
+</span>
+</div>
+</div>
+</article>
+<!-- Bento Tile 2: Creative Studio & Fashion Reel -->
+<article class="relative aspect-[3/4] rounded-2xl overflow-hidden border border-outline-variant/20 shadow-sm group">
+<img alt="Creative Lookbook Reel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Fashion lifestyle outdoor portrait of a young model walking on sandy coast in futuristic white oversized tech jacket and vibrant neon chartreuse shorts under radiant sunny sky." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcjnXsZDUMV3CF_YD4qVdWEVf8dgLn1pvOUlWlXSnDE6ib9iWlNz-R9NiYpogHh2OxQhUjQHrRwUzOwpBEQLe--Q6L0EgUwPaSEEWDOpTBiOQsu8nQmKU3jh4j1Y-z14coDumrWR6l_HoqQ9z_tC6CAMVM7F4m9SqQbo5hhciOlFQkX9_fxNAKyP7bDjUxtoBlrKhZPs8_JRi3sRuJHhQ8_tcOEmBw3SWvoyNCAv0">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+<!-- Duration Badge Top Right -->
+<div class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-white/75 backdrop-blur-md border border-white/30 text-on-surface font-label-caps text-label-caps font-bold">
+              0:42
+            </div>
+<!-- Author & Stats Foot -->
+<div class="absolute bottom-2.5 inset-x-2.5 text-white">
+<div class="flex items-center space-x-1.5 mb-1">
+<img alt="Robert Fox" class="w-5 h-5 rounded-full object-cover ring-1 ring-white/60" data-alt="Portrait avatar of a young creative with silver chain necklace and modern cropped hair in high contrast daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPr023zldWqtEJgelGPKPwBoTMU-Akpow9xL3UOzaOHbtZkU4RRlhxZrq8WBW3u2lP5ewYnYwGUJI_hybs_2Ms_bAOOdpNMQgrAtmf3xTEN86hk4fr1RW3chFE6GOjaYavfBWPZB2iVK9PQYn4hmrXdQaxRDqXKIp6C0DF2jCI0IwjHnx6_ynP5KSjviU2r-OR5JNBDp_Hwyt31LSuNCouSq4zQ1OKdzjWzANLSF0">
+<span class="font-label-md text-label-md font-medium text-white/95 truncate">Robert Fox</span>
+</div>
+<div class="flex items-center justify-between text-white/80 font-body-sm text-body-sm">
+<span class="flex items-center space-x-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="favorite">favorite</span>
+<span class="">88.2K</span>
+</span>
+<span class="flex items-center space-x-0.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="play_arrow">play_arrow</span>
+<span class="">34.6K</span>
+</span>
+</div>
+</div>
+</article>
+<!-- Bento Tile 3: Broad Curated Audio/Visual Feature -->
+<article class="col-span-2 relative h-36 rounded-2xl overflow-hidden border border-outline-variant/20 shadow-sm group">
+<img alt="Audio Session Discovery" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Dynamic wide creative visual of a DJ music session with neon warm golden light and analog vinyl player in a cozy minimalist loft room with deep shadows and editorial ambiance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGN7ilo8vChll8Ne1AdfHTtF1_LerC2ZWwmf_C0u31Ld1_r6_oBuriZ6Ql8Vn_yUE33tSk5B6ddIPYM-N03JWQ6qAD1s9JHJchwsDr43wOEpjQ1TS2cPnLe-cq0IvTbc_l6tCgEheOMHElpxqnCbaX-2m5uRHrON_Wfd36PDqAIhw4lRpCRjk27tRUovGMFkB4bnSayPaUKlPLnr5TonVaDB_X4uTnpFrFmpZQvqU">
+<div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent"></div>
+<div class="relative z-10 h-full p-4 flex flex-col justify-between max-w-[70%]">
+<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-primary-container text-on-surface font-label-caps text-label-caps uppercase w-max font-bold">
+<span class="material-symbols-outlined text-[13px]" data-icon="graphic_eq">graphic_eq</span>
+<span class="">Live Audio Room</span>
+</span>
+<div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-white tracking-tight leading-tight">Golden Hour Beats &amp; Poetry</h4>
+<p class="font-body-sm text-body-sm text-white/75 mt-0.5">142 listeners tuned in</p>
+</div>
+</div>
+<!-- Join Button Overlaid -->
+<div class="absolute right-4 bottom-4">
+<button class="px-4 py-2 rounded-full bg-white text-on-surface font-label-md text-label-md font-bold shadow-md hover:bg-primary-container transition-colors active:scale-95">
+                Join
+              </button>
+</div>
+</article>
+</div>
+</section>
+</div>
+<!-- FLOATING BOTTOM NAVIGATION BAR (Executed strictly via Shared Components JSON) -->
+<!-- JSON Blueprint: BottomNavBar | type: icons_only | destination_count: 5 | icons: ["home", "explore", "add", "chat_bubble", "person"] -->
+<!-- Active state determined semantically: Current screen is 'Discover & Explore', hence destination icon 'explore' is ACTIVE -->
+<nav aria-label="Main Navigation" class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-space-md py-space-sm max-w-sm mx-auto mb-space-md rounded-full bg-surface-container-lowest/90 backdrop-blur-xl border border-outline-variant/40 shadow-2xl shadow-on-surface/10 select-none">
+<!-- 1. Home destination -->
+<a aria-label="Home" class="flex items-center justify-center text-secondary hover:text-on-surface transition-colors active:scale-90 transition-transform duration-200 p-2" href="#home">
+<span class="material-symbols-outlined text-[24px]" data-icon="home">home</span>
+</a>
+<!-- 2. Explore / Discover destination (ACTIVE - mapped exactly to Shared Component style_active_navigation) -->
+<a aria-label="Explore" class="flex items-center justify-center text-on-surface relative after:content-[''] after:absolute after:-bottom-1.5 after:w-1 after:h-1 after:bg-primary after:rounded-full hover:text-on-surface transition-colors active:scale-90 transition-transform duration-200 p-2" href="#explore">
+<span class="material-symbols-outlined text-[24px]" data-icon="explore" data-weight="fill" style="font-variation-settings: 'FILL' 1;">explore</span>
+</a>
+<!-- 3. Add / Hero Center Action Button (Raised yellow circle halo matching style guidance & image) -->
+<div class="relative -top-2 flex items-center justify-center">
+<button aria-label="Create Spark" class="w-14 h-14 rounded-full bg-primary-container text-on-surface flex items-center justify-center shadow-lg shadow-primary-container/50 active:scale-90 transition-transform duration-200 hover:scale-105">
+<span class="material-symbols-outlined text-[28px] font-bold" data-icon="add">add</span>
+</button>
+</div>
+<!-- 4. Chat Bubble destination -->
+<a aria-label="Pod" class="flex items-center justify-center text-secondary hover:text-on-surface transition-colors active:scale-90 transition-transform duration-200 p-2" href="#pod">
+<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path><path d="M12 13.5V20"></path><path d="M7.75 6.25a6 6 0 0 0 0 8.5"></path><path d="M16.25 6.25a6 6 0 0 1 0 8.5"></path><path d="M4.93 3.43a10 10 0 0 0 0 14.14"></path><path d="M19.07 3.43a10 10 0 0 1 0 14.14"></path></svg>
+</a>
+<!-- 5. Profile destination -->
+<a aria-label="Profile" class="flex items-center justify-center text-secondary hover:text-on-surface transition-colors active:scale-90 transition-transform duration-200 p-2" href="#profile">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+</a>
+</nav>
+</main>
+
+
+</body></html>
+
+<!-- Pod - Point of Discussion -->
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Pod - Point of Discussion</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#ffb3b0",
+            "on-tertiary-fixed": "#410007",
+            "surface-tint": "#765b00",
+            "outline-variant": "#d2c5ab",
+            "on-tertiary-fixed-variant": "#92001b",
+            "on-tertiary": "#ffffff",
+            "surface-container-highest": "#e2e2e2",
+            "surface-dim": "#dadada",
+            "on-error-container": "#93000a",
+            "secondary": "#5f5e5e",
+            "tertiary": "#b52330",
+            "primary": "#765b00",
+            "on-primary-fixed-variant": "#594400",
+            "primary-container": "#ffc700",
+            "secondary-container": "#e5e2e1",
+            "inverse-primary": "#f5bf00",
+            "secondary-fixed": "#e5e2e1",
+            "background": "#f9f9f9",
+            "on-secondary-fixed-variant": "#474646",
+            "surface": "#f9f9f9",
+            "on-primary-fixed": "#251a00",
+            "error": "#ba1a1a",
+            "on-secondary-fixed": "#1c1b1b",
+            "inverse-surface": "#2f3131",
+            "surface-variant": "#e2e2e2",
+            "inverse-on-surface": "#f0f1f1",
+            "on-surface": "#1a1c1c",
+            "on-secondary-container": "#656464",
+            "secondary-fixed-dim": "#c8c6c5",
+            "on-secondary": "#ffffff",
+            "on-background": "#1a1c1c",
+            "on-tertiary-container": "#ac1b2a",
+            "surface-bright": "#f9f9f9",
+            "surface-container-high": "#e8e8e8",
+            "on-surface-variant": "#4f4632",
+            "error-container": "#ffdad6",
+            "surface-container": "#eeeeee",
+            "primary-fixed-dim": "#f5bf00",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary-container": "#ffbfbc",
+            "tertiary-fixed": "#ffdad8",
+            "primary-fixed": "#ffdf94",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f3f3f3",
+            "on-primary-container": "#6e5400",
+            "outline": "#81765f"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "margin": "1.25rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "label-caps": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "display-hero-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display-hero": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "display-hero-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Hide scrollbar for clean horizontal story / pills flow */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#f0f0f2] min-h-screen text-on-surface flex justify-center items-start antialiased selection:bg-primary-container selection:text-on-surface">
+<!-- Mobile Device Canvas Wrapper -->
+<main class="w-full max-w-[420px] bg-background min-h-screen relative flex flex-col shadow-2xl overflow-x-hidden border-x border-[#ebebeb]">
+<!-- Status Bar Simulation -->
+<header class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md px-margin pt-3 pb-2 flex items-center justify-between">
+<span class="font-headline-sm text-label-md tracking-tight font-bold text-on-surface">9:41</span>
+<!-- Dynamic Island Indicator -->
+<div class="w-24 h-5 bg-on-surface rounded-full flex items-center justify-end px-2 space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-container-lowest/60"></span>
+</div>
+<div class="flex items-center space-x-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[15px]" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[15px]" data-icon="wifi">wifi</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="battery_full">battery_full</span>
+</div>
+</header>
+<!-- Top App Bar & Header Branding -->
+<section class="px-margin pt-2 pb-3 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shadow-sm shrink-0">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-on-surface"><line x1="50" y1="52" x2="50" y2="85"></line><circle cx="50" cy="45" r="8.5"></circle><path d="M 35.86 30.86 A 20 20 0 0 0 35.86 59.14"></path><path d="M 64.14 30.86 A 20 20 0 0 1 64.14 59.14"></path><path d="M 25.96 20.96 A 34 34 0 0 0 25.96 69.04"></path><path d="M 74.04 20.96 A 34 34 0 0 1 74.04 69.04"></path></svg>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<h1 class="font-headline-lg text-headline-md tracking-tight text-on-surface font-extrabold leading-tight">Pod</h1>
+<div class="flex items-center space-x-1 bg-surface-container px-2 py-0.5 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-label-caps text-[11px] font-semibold text-secondary">14.8k live</span>
+</div>
+</div>
+<p class="font-body-sm text-[12px] text-secondary leading-none">Point of Discussion</p>
+</div>
+</div>
+<div class="flex items-center space-x-2 shrink-0">
+<button aria-label="Search Pods" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center hover:bg-surface-container transition-colors text-on-surface active:scale-95">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+</button>
+<button aria-label="Start a Pod Broadcast" class="w-9 h-9 rounded-full bg-primary-container text-on-surface flex items-center justify-center shadow-md shadow-primary-container/30 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px] font-bold" data-icon="add">add</span>
+</button>
+</div>
+</section>
+<!-- Hot Topics / Trending Tags Ribbon -->
+<section class="py-2 border-b border-surface-container">
+<div class="flex items-center space-x-2 overflow-x-auto no-scrollbar px-margin py-1">
+<button class="shrink-0 flex items-center space-x-1.5 bg-on-surface text-surface-container-lowest px-3 py-1.5 rounded-full font-label-md text-label-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[15px]" data-icon="tune">tune</span>
+<span class="">Feed</span>
+</button>
+<a class="shrink-0 flex items-center space-x-1.5 bg-primary-container/20 border border-primary-container/40 text-on-surface px-3 py-1.5 rounded-full font-label-md text-label-md hover:bg-primary-container/30 transition-colors" href="#vote">
+<span class="text-xs leading-none">🔥</span>
+<span class="font-bold">#AlgorithmicTruth</span>
+</a>
+<a class="shrink-0 flex items-center space-x-1.5 bg-surface-container-lowest border border-outline-variant/30 text-on-surface px-3 py-1.5 rounded-full font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-sm" href="#spatial-audio">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span class="">#SpatialAudio</span>
+<span class="text-secondary font-normal text-xs">3.2k</span>
+</a>
+<a class="shrink-0 flex items-center space-x-1 bg-surface-container-lowest border border-outline-variant/30 text-on-surface px-3 py-1.5 rounded-full font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-sm" href="#35mm-film">
+<span class="">#IndieCinema</span>
+</a>
+<a class="shrink-0 flex items-center space-x-1.5 bg-surface-container-lowest border border-outline-variant/30 text-on-surface px-3 py-1.5 rounded-full font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-sm" href="#ai-debate">
+<span class="">#AIethics</span>
+<span class="text-secondary font-normal text-xs">14.2k</span>
+</a>
+<a class="shrink-0 flex items-center space-x-1 bg-surface-container-lowest border border-outline-variant/30 text-on-surface px-3 py-1.5 rounded-full font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-sm" href="#audio-spotlight">
+<span class="">#SolarDrift</span>
+</a>
+</div>
+</section>
+<!-- Pod Content Canvas (Editorial Bento Flow) -->
+<div class="px-margin py-space-md space-y-space-lg pb-32">
+<!-- 1. EXPIRING COMMUNITY VOTE / POLL CARD -->
+<article class="bg-surface-container-lowest rounded-2xl p-space-md border border-surface-container shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] relative overflow-hidden" id="vote">
+<!-- Accent top light highlight -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-container via-primary-container to-transparent"></div>
+<!-- Author Meta Bar -->
+<div class="flex items-center justify-between mb-space-sm pt-1">
+<div class="flex items-center space-x-2.5">
+<img class="w-10 h-10 rounded-full object-cover ring-2 ring-primary-container/40" data-alt="Close up editorial portrait of young creator Leslie Alexander in a soft studio lighting with a yellow knit beanie, modern aesthetic and authentic expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdfdKoLvTU-OFLQyiNzgeO3FT9LPRNvlp1PsPRiEPA8-lrNOUyDsQ7hJBnFpAmGQwomkXtr-qESUJvhFyECsy1EbaYf3ke1kcKPMgToXDgCmNo9T6UWtNpauzXD2_xc3MPnyPoEAl6pYNA2UnsWGyU37qLINrxn2uUAdU4ZRVQQoqdG3TZ_PRu55hLxpYc_4DGEipuWQpU5gaGoiaXnGuzwL01R5kXMJF98CzppaE">
+<div>
+<div class="flex items-center space-x-1">
+<span class="font-headline-sm text-body-md font-bold text-on-surface">Leslie Alexander</span>
+<span class="material-symbols-outlined text-[16px] text-primary material-symbols-fill" data-icon="verified">verified</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">@leslie_alex007 · 42m ago</p>
+</div>
+</div>
+<div class="bg-primary-container/20 border border-primary-container text-on-surface px-2.5 py-1 rounded-full flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="schedule">schedule</span>
+<span class="font-label-caps text-label-caps">Ends 3h 42m</span>
+</div>
+</div>
+<!-- Question Prompt -->
+<h2 class="font-headline-md text-headline-sm font-bold text-on-surface mb-space-sm leading-snug">
+          Is algorithmic curation killing authentic community discoverability?
+        </h2>
+<p class="font-body-sm text-body-sm text-secondary mb-space-md">
+          Platforms optimize for instant dopamine loops, while grassroots creators lose organic discovery. Where does the drift head?
+        </p>
+<!-- Interactive Poll Options -->
+<div class="space-y-2 mb-space-md">
+<!-- Option 1 (Leading) -->
+<div class="relative w-full rounded-xl bg-surface-container-low overflow-hidden p-3.5 border border-outline-variant/30 flex items-center justify-between cursor-pointer group active:scale-[0.99] transition-transform">
+<div class="absolute inset-y-0 left-0 bg-primary-container/40 rounded-xl" style="width: 62%;"></div>
+<div class="relative z-10 flex items-center space-x-2">
+<span class="w-5 h-5 rounded-full border-2 border-on-surface flex items-center justify-center bg-on-surface text-surface-container-lowest">
+<span class="material-symbols-outlined text-[13px]" data-icon="check">check</span>
+</span>
+<span class="font-label-lg text-body-md font-bold text-on-surface">Yes, heavily siloed</span>
+</div>
+<span class="relative z-10 font-headline-sm text-body-md font-extrabold text-on-surface">62%</span>
+</div>
+<!-- Option 2 -->
+<div class="relative w-full rounded-xl bg-surface-container-low overflow-hidden p-3.5 border border-outline-variant/20 flex items-center justify-between cursor-pointer active:scale-[0.99] transition-transform">
+<div class="absolute inset-y-0 left-0 bg-secondary-container/60 rounded-xl" style="width: 28%;"></div>
+<div class="relative z-10 flex items-center space-x-2">
+<span class="w-5 h-5 rounded-full border-2 border-secondary/40"></span>
+<span class="font-label-lg text-body-md text-on-surface">No, it enhances discovery</span>
+</div>
+<span class="relative z-10 font-label-lg text-body-md text-secondary font-semibold">28%</span>
+</div>
+<!-- Option 3 -->
+<div class="relative w-full rounded-xl bg-surface-container-low overflow-hidden p-3.5 border border-outline-variant/20 flex items-center justify-between cursor-pointer active:scale-[0.99] transition-transform">
+<div class="absolute inset-y-0 left-0 bg-secondary-container/50 rounded-xl" style="width: 10%;"></div>
+<div class="relative z-10 flex items-center space-x-2">
+<span class="w-5 h-5 rounded-full border-2 border-secondary/40"></span>
+<span class="font-label-lg text-body-md text-on-surface">Undecided / Mixed</span>
+</div>
+<span class="relative z-10 font-label-lg text-body-md text-secondary font-semibold">10%</span>
+</div>
+</div>
+<!-- Poll Footer & Discussion Prompt -->
+<div class="flex items-center justify-between pt-2 border-t border-surface-container">
+<div class="flex items-center space-x-1 text-secondary font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="how_to_vote">how_to_vote</span>
+<span class="font-semibold text-on-surface">4,812</span>
+<span class="">votes tallied</span>
+</div>
+<button class="flex items-center space-x-1.5 bg-surface-container px-3 py-1.5 rounded-full font-label-md text-label-md text-on-surface hover:bg-primary-container/40 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="chat_bubble">chat_bubble</span>
+<span class="">142 Pod replies</span>
+</button>
+</div>
+</article>
+<!-- 2. VIRAL AUDIO POD CLIP CARD -->
+<article class="bg-surface-container-lowest rounded-2xl p-space-md border border-surface-container shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]" id="spatial-audio">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-label-caps text-label-caps uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full tracking-wider font-bold">LIVE AUDIO POD</span>
+</div>
+<div class="flex items-center space-x-1 text-secondary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]" data-icon="headphones">headphones</span>
+<span class="">890 tuned in</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-sm font-bold text-on-surface mb-2">
+          Deep Dive: The Future of Spatial Audio &amp; Creative Drift
+        </h3>
+<!-- Speaker Stacks -->
+<div class="flex items-center space-x-3 mb-space-md">
+<div class="flex -space-x-2">
+<img class="w-9 h-9 rounded-full object-cover ring-2 ring-surface-container-lowest" data-alt="Stylish portrait of female music producer Elena Vance with headphones against minimalist editorial background with warm tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3aFn95azGFWQDXScE0Pispubog3bTq6kL5NkXfjgC6CG-O09eTtI03FN6ZND3wm-d1c0rR-OuwVX7Xr4B2-nElwWuOvwG4DmHjp8Bvhvazy9cM7bl3ubiPgYkjw5A4HANbzyWS4-yqNefk4dO85RDdaHFnD5TV4dxL5zFPkXrp6fwqEGF_duVf7M0pC7oJ609z4z_crP7OqwDXKk-iKTPF4jqFsCZ59d_EXFVr44">
+<img class="w-9 h-9 rounded-full object-cover ring-2 ring-surface-container-lowest" data-alt="Portrait of young urban streetwear fashion photographer Guy Hawkins with cool attitude and natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn4ue3DQttRczU0dqmCbEWgfWUo_jFvuTsUw2mpLqDi2kb2g9iJqubzT09O0sQY0J10PNLGfcQkiRdT076yXcK2f-pZqkGd_QsVfBO7BaSHF_SohTPi0WGl950PR4Q4B2I6kwJHpKjflRWotwJ7Ka0iXlKpn3PmermX7k4eyTJtG5VSrzxErUmXguQPjHJ8oJUtLJeZZKE32jdBa-PoxOv59VkK58Wy-Bn1tkhBM4">
+<div class="w-9 h-9 rounded-full bg-secondary-container text-on-surface text-xs font-bold flex items-center justify-center ring-2 ring-surface-container-lowest">
+              +4
+            </div>
+</div>
+<div>
+<p class="font-label-md text-label-md font-semibold text-on-surface">Elena Vance &amp; Guy Hawkins</p>
+<p class="font-body-sm text-body-sm text-secondary">Co-hosting audio session</p>
+</div>
+</div>
+<!-- Audio Waveform Player Widget -->
+<div class="bg-surface-container-low rounded-xl p-3.5 flex items-center space-x-3 border border-outline-variant/20">
+<button aria-label="Play audio snippet" class="w-12 h-12 rounded-full bg-primary-container text-on-surface flex items-center justify-center shrink-0 shadow-md shadow-primary-container/40 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[26px] material-symbols-fill" data-icon="play_arrow">play_arrow</span>
+</button>
+<!-- Mock Audio Waveform -->
+<div class="flex-1 flex flex-col justify-center">
+<div class="flex items-center space-x-0.5 h-7">
+<span class="w-1 bg-on-surface rounded-full h-3"></span>
+<span class="w-1 bg-on-surface rounded-full h-5"></span>
+<span class="w-1 bg-on-surface rounded-full h-4"></span>
+<span class="w-1 bg-on-surface rounded-full h-6"></span>
+<span class="w-1 bg-primary-container rounded-full h-7"></span>
+<span class="w-1 bg-primary-container rounded-full h-4"></span>
+<span class="w-1 bg-on-surface rounded-full h-6"></span>
+<span class="w-1 bg-on-surface rounded-full h-3"></span>
+<span class="w-1 bg-outline-variant rounded-full h-5"></span>
+<span class="w-1 bg-outline-variant rounded-full h-4"></span>
+<span class="w-1 bg-outline-variant rounded-full h-6"></span>
+<span class="w-1 bg-outline-variant rounded-full h-3"></span>
+<span class="w-1 bg-outline-variant rounded-full h-5"></span>
+<span class="w-1 bg-outline-variant rounded-full h-2"></span>
+<span class="w-1 bg-outline-variant rounded-full h-4"></span>
+<span class="w-1 bg-outline-variant rounded-full h-6"></span>
+<span class="w-1 bg-outline-variant rounded-full h-3"></span>
+</div>
+<div class="flex justify-between items-center text-[11px] text-secondary font-mono mt-1">
+<span class="">01:12</span>
+<span class="">02:45</span>
+</div>
+</div>
+<!-- Join Stage Action -->
+<button class="bg-on-surface text-surface-container-lowest px-3 py-2 rounded-full font-label-md text-label-md font-bold whitespace-nowrap active:scale-95 transition-transform">
+            Join In
+          </button>
+</div>
+</article>
+<!-- 3. VIRAL VIDEO / MEDIA DISCUSSION POST -->
+<article class="bg-surface-container-lowest rounded-2xl overflow-hidden border border-surface-container shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]" id="35mm-film">
+<!-- Media Container -->
+<div class="relative w-full aspect-[4/3] bg-on-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Cinematic frame of young independent cinematographers filming with an authentic retro 35mm film camera on a golden hour urban rooftop, vibrant sunlight and textured film grain aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvcRUCjzwYX5kOwcTdl-3QXOJBq81-sgEUEiOw1Wml9TtLADwjH72t7Je-_59H_QuLdRYfg9L9QF0JOY6SisS10wx0jMqT0rKUBtQtP-7FZ_VwGG0TPSazBB9Y6h5gmC2Ov7f5QX3CUlLaYCmO7WkPi4tA9gWAIt5dLMyB8jm8jPpwAEx2ayzcHerQMFybg8mYkHpW6IxmYBS1cFTUh7k-QAL-NeTDvs-ww8I4dn4">
+<!-- Gradient overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<!-- Badge overlay -->
+<div class="absolute top-3 left-3 bg-surface-container-lowest/80 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center space-x-1.5 border border-white/40">
+<span class="material-symbols-outlined text-[14px] text-tertiary material-symbols-fill" data-icon="videocam">videocam</span>
+<span class="font-label-caps text-label-caps font-bold text-on-surface">MEDIA REEL</span>
+</div>
+<div class="absolute top-3 right-3 bg-black/50 backdrop-blur-md px-2 py-1 rounded-full text-white text-[12px] font-mono flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="visibility">visibility</span>
+<span class="">45.9k</span>
+</div>
+<!-- Play Center Trigger -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-14 h-14 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center text-white border border-white/50 shadow-lg cursor-pointer hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[32px] material-symbols-fill ml-1" data-icon="play_arrow">play_arrow</span>
+</div>
+</div>
+<!-- Author overlay on bottom media -->
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
+<div class="flex items-center space-x-2">
+<img class="w-7 h-7 rounded-full object-cover border border-white" data-alt="Profile avatar shot of young indie filmmaker Robert Fox in outdoor daylight wearing beanie and vintage sunglasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEMXwxhaSANssNNt9lVfb8-BPkvfmwvPgz6yV3jQicxjA1BP1g9MljCirT2F2njH9TzWdsuQAxF5xLYxbMfVmrtOMo0WL29DcrBCJVfw2lSvYZYoqN7pTTIiFxAvKq6CtffowNCOV8emjMT0FOyRi_z7BCs6BcDC02o8w2LENSyOeW3CE986FPnWlLslMxspigSjZ8oy8NH_SNQOMmMVBBEejkJTictTW35hkS58k">
+<span class="font-label-md text-label-md font-bold drop-shadow">Robert Fox</span>
+</div>
+<span class="bg-primary-container text-on-surface font-label-caps text-label-caps px-2 py-0.5 rounded-full font-bold">#IndieCinema</span>
+</div>
+</div>
+<!-- Video Post Description & Metrics -->
+<div class="p-space-md">
+<p class="font-body-md text-body-md font-medium text-on-surface mb-3 leading-snug">
+            Inside the revival of 35mm film culture in 2025. Why analog imperfections spark deeper emotional engagement than hyper-crisp 8K sensors.
+          </p>
+<!-- Interaction Counts -->
+<div class="flex items-center justify-between pt-2 border-t border-surface-container text-secondary">
+<div class="flex items-center space-x-4">
+<button class="flex items-center space-x-1 hover:text-tertiary transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]" data-icon="favorite">favorite</span>
+<span class="font-label-md text-label-md">18.4k</span>
+</button>
+<button class="flex items-center space-x-1 hover:text-on-surface transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-md text-label-md">630</span>
+</button>
+<button class="flex items-center space-x-1 hover:text-on-surface transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]" data-icon="repeat">repeat</span>
+<span class="font-label-md text-label-md">1.2k</span>
+</button>
+</div>
+<button aria-label="Bookmark discussion" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="bookmark">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- 4. VIRAL LINK / ARTICLE INSIGHT SNIPPET -->
+<article class="bg-surface-container-lowest rounded-2xl p-space-md border border-surface-container shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]" id="ai-debate">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="newspaper">newspaper</span>
+<span class="font-label-caps text-label-caps uppercase text-secondary tracking-wider font-bold">EDITORIAL DISPATCH</span>
+</div>
+<span class="font-label-md text-label-md text-secondary">5 min read</span>
+</div>
+<a class="block group" href="#article">
+<h3 class="font-headline-md text-headline-sm font-bold text-on-surface group-hover:text-primary transition-colors leading-snug mb-2">
+            Open Source AI Models: What happens to creator copyright when training sets are communal?
+          </h3>
+<p class="font-body-sm text-body-sm text-secondary line-clamp-2 mb-3">
+            An exploratory essay on how generative decentralized collectives are restructuring royalty pipelines for digital artists.
+          </p>
+</a>
+<!-- Link Preview Card Box -->
+<div class="bg-surface-container-low rounded-xl p-3 flex items-center justify-between border border-outline-variant/30 hover:border-primary-container transition-colors">
+<div class="flex items-center space-x-2.5">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]" data-icon="language">language</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">dispatch.driftmag.io</p>
+<p class="font-body-sm text-[11px] text-secondary">By Sarah Chen · 380 community footnotes</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary group-hover:translate-x-1 transition-transform" data-icon="arrow_outward">arrow_outward</span>
+</div>
+<div class="flex items-center justify-between mt-3 pt-2 border-t border-surface-container">
+<span class="font-label-md text-label-md text-secondary">2.4k Pod participants</span>
+<button class="bg-primary-container text-on-surface px-3 py-1 rounded-full font-label-md text-label-md font-bold hover:bg-primary-fixed transition-colors active:scale-95">
+            Discuss
+          </button>
+</div>
+</article>
+<!-- 5. TRENDING SONG / AUDIO TRACK HIGHLIGHT -->
+<article class="bg-gradient-to-br from-surface-container-lowest to-surface-container-low rounded-2xl p-space-md border border-surface-container shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]" id="audio-spotlight">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-label-caps uppercase text-on-primary-container bg-primary-container/30 px-2 py-0.5 rounded-full font-bold">COMMUNITY SOUNDTRACK</span>
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<div class="flex items-center space-x-3.5 mb-3">
+<!-- Album Thumbnail -->
+<div class="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-md">
+<img class="w-full h-full object-cover" data-alt="Vibrant modern indie album cover artwork featuring abstract warm yellow and sunset orange geometric typography and analog synth vibes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjrg1kWPmJ9kvLSSoSeOiUk_mSRDtHyzp0ebknS-fyxzKmbZA_zBfb4be00FvyyvweURKIxtL0mCe84a_jFZLlRwbmE8hPr33al9jMnYVWRBjPPTTvU5hilHKb4kvsW6jkBVsgDR9dc_CDJ0JjdAxcJZ66kRlUnT-fhj-ykR5rhoriIgQKjrMXomejBLWAg0S7GdbnXipaE5iNb_3s8SMifIlZ8aFa8mtbTUSm5bw">
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[20px] material-symbols-fill" data-icon="play_circle">play_circle</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-headline-sm text-body-md font-bold text-on-surface">Now Echoing: Solar Drift</p>
+<p class="font-body-sm text-body-sm text-secondary">Vance &amp; The Groove · 42.1k Pod clips</p>
+<div class="flex items-center space-x-1 mt-1 text-primary">
+<span class="material-symbols-outlined text-[13px]" data-icon="trending_up">trending_up</span>
+<span class="font-label-caps text-[10px] uppercase font-bold tracking-wide">#1 On Soundboard</span>
+</div>
+</div>
+</div>
+<!-- Fast Tap Sample Buttons -->
+<div class="flex items-center space-x-2">
+<button class="flex-1 bg-surface-container-highest py-2 px-3 rounded-full flex items-center justify-center space-x-1.5 font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]" data-icon="music_note">music_note</span>
+<span class="">Use in Pod</span>
+</button>
+<button class="bg-on-surface text-surface-container-lowest py-2 px-4 rounded-full font-label-md text-label-md active:scale-95 transition-transform flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="forum">forum</span>
+<span class="">Listen &amp; Talk</span>
+</button>
+</div>
+</article><article class="bg-surface-container-lowest rounded-2xl p-space-md border border-surface-container shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)] overflow-hidden" id="design-essay"><div class="flex items-center justify-between mb-3"><div class="flex items-center space-x-2"><span class="font-headline-sm text-body-md font-bold text-on-surface">Elena Vance</span><span class="font-body-sm text-body-sm text-secondary">@elena_vance</span><span class="text-secondary text-xs">·</span><span class="font-body-sm text-body-sm text-secondary">1h ago</span></div><span class="font-label-caps text-[10px] uppercase text-on-primary-container bg-primary-container/30 px-2 py-0.5 rounded-full font-bold tracking-wider">ESSAY</span></div><h3 class="font-headline-sm text-body-md font-bold text-on-surface mb-1.5 leading-snug">The Quiet Geometry of Light</h3><p class="font-body-sm text-body-sm text-secondary mb-3 leading-relaxed">Can silence in architecture recalibrate our creative focus in an attention-starved era?</p><div class="flex items-center justify-between pt-2.5 border-t border-surface-container text-secondary text-body-sm"><div class="flex items-center space-x-4"><button class="flex items-center space-x-1.5 hover:text-tertiary transition-colors active:scale-90 group"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg><span class="font-label-md text-label-md">3.4k</span></button><button class="flex items-center space-x-1.5 hover:text-on-surface transition-colors active:scale-90 group"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span class="font-label-md text-label-md">184</span></button><button class="flex items-center space-x-1.5 hover:text-on-surface transition-colors active:scale-90 group"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg><span class="font-label-md text-label-md">842</span></button></div><div class="flex items-center space-x-1"><button aria-label="Bookmark essay discussion" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center transition-colors text-secondary hover:text-on-surface active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></button><button aria-label="Share essay discussion" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center transition-colors text-secondary hover:text-on-surface active:scale-90"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg></button></div></div></article>
+</div>
+<!-- SHARED COMPONENT: FLOATING BOTTOM NAVBAR -->
+<!-- Destination 4: "Pod" (hotspot/broadcast) is the current active destination -->
+<nav aria-label="Bottom Navigation" class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around px-space-md py-space-sm max-w-sm mx-auto mb-space-md rounded-full bg-surface-container-lowest/90 backdrop-blur-xl border border-outline-variant/40 shadow-2xl shadow-on-surface/10">
+<!-- 1. Home -->
+<a aria-label="Home Feed" class="flex items-center justify-center text-secondary hover:text-on-surface transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="home">home</span>
+</a>
+<!-- 2. Explore -->
+<a aria-label="Explore" class="flex items-center justify-center text-secondary hover:text-on-surface transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="explore">explore</span>
+</a>
+<!-- 3. Center Action (+ Create) -->
+<button aria-label="Create Pod Post" class="w-12 h-12 rounded-full bg-primary-container text-on-surface flex items-center justify-center shadow-lg shadow-primary-container/45 active:scale-90 transition-transform -my-2">
+<span class="material-symbols-outlined text-[26px] font-bold" data-icon="add">add</span>
+</button>
+<!-- 4. Pod / Broadcast (ACTIVE DESTINATION) -->
+<a aria-label="Pod Discussions (Current)" class="flex items-center justify-center text-on-surface relative after:content-[''] after:absolute after:-bottom-1.5 after:w-1.5 after:h-1.5 after:bg-primary after:rounded-full active:scale-90 transition-transform" href="#">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-on-surface"><line x1="50" y1="52" x2="50" y2="85"></line><circle cx="50" cy="45" r="8.5"></circle><path d="M 35.86 30.86 A 20 20 0 0 0 35.86 59.14"></path><path d="M 64.14 30.86 A 20 20 0 0 1 64.14 59.14"></path><path d="M 25.96 20.96 A 34 34 0 0 0 25.96 69.04"></path><path d="M 74.04 20.96 A 34 34 0 0 1 74.04 69.04"></path></svg>
+</a>
+<!-- 5. Profile -->
+<a aria-label="Profile" class="flex items-center justify-center text-secondary hover:text-on-surface transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+</a>
+</nav>
+</main>
+<script>
+    // Lightweight tactile poll vote micro-interaction
+    document.querySelectorAll('#vote [class*="cursor-pointer"]').forEach(option => {
+      option.addEventListener('click', function() {
+        this.parentElement.querySelectorAll('[class*="cursor-pointer"]').forEach(el => {
+          el.classList.remove('ring-2', 'ring-primary-container');
+        });
+        this.classList.add('ring-2', 'ring-primary-container');
+      });
+    });
+  </script>
+
+
+</body></html>
+
+
+

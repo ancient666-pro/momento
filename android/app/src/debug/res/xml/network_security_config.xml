@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      Debug-only override. Permits cleartext to any host so a build can target a
+      LAN address (for example -Pmomento.apiBaseUrl=http://192.168.1.20:8080/).
+      The release build uses src/main/res/xml/network_security_config.xml, which
+      only allows loopback hosts.
+    -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

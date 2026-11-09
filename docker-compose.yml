@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: momento-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-momento}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-momento_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-momento}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-momento}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: momento-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Local S3-compatible object storage. MinIO's published Docker images are not
+  # reachable from every environment, so development uses Adobe S3Mock, which
+  # implements the S3 API (including presigned URLs). Production points at
+  # AWS S3, MinIO, or any S3-compatible provider via the S3_* variables.
+  minio:
+    image: adobe/s3mock:latest
+    container_name: momento-minio
+    environment:
+      initialBuckets: ${S3_BUCKET:-momento-media}
+      root: "momento-"
+    ports:
+      - "9000:9090"
+    volumes:
+      - minio_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

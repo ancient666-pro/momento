@@ -1,0 +1,722 @@
+openapi: 3.0.3
+info:
+  title: Momento API
+  version: 1.0.0
+  description: |
+    Momento social platform API. All routes are prefixed with `/api/v1`.
+    Authenticated routes expect `Authorization: Bearer <access token>`.
+    List endpoints are paged with a zero-based `page` query parameter and
+    return `{ items, next_cursor }`.
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development
+security:
+  - bearerAuth: []
+paths:
+  /auth/register:
+    post:
+      summary: Create an account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201': { description: Account created, content: { application/json: { schema: { $ref: '#/components/schemas/AuthResponse' } } } }
+        '409': { $ref: '#/components/responses/Error' }
+  /auth/login:
+    post:
+      summary: Log in with email/username and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                username: { type: string }
+                password: { type: string }
+              required: [password]
+      responses:
+        '200': { description: Authenticated, content: { application/json: { schema: { $ref: '#/components/schemas/AuthResponse' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+  /auth/refresh:
+    post:
+      summary: Rotate a refresh token
+      security: []
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { refreshToken: { type: string } }, required: [refreshToken] } } }
+      responses:
+        '200': { description: New token pair, content: { application/json: { schema: { $ref: '#/components/schemas/AuthResponse' } } } }
+        '401': { $ref: '#/components/responses/Error' }
+  /auth/logout:
+    post:
+      summary: Revoke a refresh token
+      security: []
+      responses:
+        '204': { description: Revoked }
+  /auth/forgot-password:
+    post:
+      summary: Request a password reset (always 202)
+      security: []
+      responses:
+        '202': { description: Accepted }
+  /users/me:
+    get:
+      summary: Current account
+      responses:
+        '200': { description: Profile, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+    patch:
+      summary: Update the current profile
+      requestBody:
+        content: { application/json: { schema: { $ref: '#/components/schemas/UpdateProfile' } } }
+      responses:
+        '200': { description: Updated profile, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+  /users/me/location:
+    put:
+      summary: Opt in to nearby discovery
+      requestBody:
+        content: { application/json: { schema: { $ref: '#/components/schemas/Location' } } }
+      responses:
+        '204': { description: Saved }
+    delete:
+      summary: Opt out and delete stored coordinates
+      responses:
+        '204': { description: Deleted }
+  /users/{userId}:
+    get:
+      summary: Public profile
+      security: []
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses:
+        '200': { description: Profile, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+  /users/{userId}/posts:
+    get:
+      summary: Posts by a user
+      security: []
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of posts, content: { application/json: { schema: { $ref: '#/components/schemas/PostPage' } } } }
+  /users/{userId}/moments:
+    get:
+      summary: Moments by a user
+      security: []
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of moments }
+  /users/{userId}/followers:
+    get:
+      summary: Followers
+      security: []
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of users }
+  /users/{userId}/following:
+    get:
+      summary: Following
+      security: []
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of users }
+  /users/{userId}/follow:
+    post:
+      summary: Follow a user
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses:
+        '204': { description: Following }
+    delete:
+      summary: Unfollow a user
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses:
+        '204': { description: Unfollowed }
+  /users/{userId}/block:
+    post:
+      summary: Block a user
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses:
+        '204': { description: Blocked }
+    delete:
+      summary: Unblock a user
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses:
+        '204': { description: Unblocked }
+  /feed/for-you:
+    get:
+      summary: Ranked For You feed
+      security: []
+      parameters: [{ $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of posts, content: { application/json: { schema: { $ref: '#/components/schemas/PostPage' } } } }
+  /feed/following:
+    get:
+      summary: Feed from followed accounts
+      parameters: [{ $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of posts, content: { application/json: { schema: { $ref: '#/components/schemas/PostPage' } } } }
+  /posts:
+    post:
+      summary: Create a post
+      requestBody:
+        content: { application/json: { schema: { $ref: '#/components/schemas/CreatePost' } } }
+      responses:
+        '201': { description: Created post, content: { application/json: { schema: { $ref: '#/components/schemas/Post' } } } }
+  /posts/{postId}:
+    get:
+      summary: Post detail
+      security: []
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '200': { description: Post, content: { application/json: { schema: { $ref: '#/components/schemas/Post' } } } }
+    patch:
+      summary: Update a post you own
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '200': { description: Updated post }
+    delete:
+      summary: Soft-delete a post you own
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '204': { description: Deleted }
+  /posts/{postId}/like:
+    post:
+      summary: Like a post
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '204': { description: Liked }
+    delete:
+      summary: Unlike a post
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '204': { description: Unliked }
+  /posts/{postId}/bookmark:
+    post:
+      summary: Bookmark a post
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '204': { description: Bookmarked }
+    delete:
+      summary: Remove a bookmark
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '204': { description: Removed }
+  /posts/{postId}/share:
+    post:
+      summary: Record a share
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      responses:
+        '204': { description: Recorded }
+  /posts/{postId}/comments:
+    get:
+      summary: List comments
+      security: []
+      parameters: [{ $ref: '#/components/parameters/PostId' }, { $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of comments }
+    post:
+      summary: Add a comment or reply
+      parameters: [{ $ref: '#/components/parameters/PostId' }]
+      requestBody:
+        content: { application/json: { schema: { type: object, properties: { body: { type: string }, parentId: { type: string, nullable: true } }, required: [body] } } }
+      responses:
+        '201': { description: Created }
+  /stories/feed:
+    get:
+      summary: Active stories
+      security: []
+      responses:
+        '200': { description: Page of stories }
+  /stories:
+    post:
+      summary: Publish a story
+      responses:
+        '201': { description: Created }
+  /stories/{storyId}:
+    get:
+      summary: Story detail
+      security: []
+      parameters: [{ name: storyId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Story }
+    delete:
+      summary: Delete your story
+      parameters: [{ name: storyId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Deleted }
+  /stories/{storyId}/view:
+    post:
+      summary: Record a story view
+      parameters: [{ name: storyId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Recorded }
+  /stories/{storyId}/reaction:
+    post:
+      summary: React to a story
+      parameters: [{ name: storyId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Recorded }
+  /moments:
+    post:
+      summary: Publish a Moment
+      responses:
+        '201': { description: Created }
+  /moments/{momentId}:
+    get:
+      summary: Moment detail
+      security: []
+      parameters: [{ name: momentId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Moment }
+    delete:
+      summary: Delete your Moment
+      parameters: [{ name: momentId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Deleted }
+  /discover/people:
+    get:
+      summary: Opt-in nearby profiles with approximate distance
+      responses:
+        '200': { description: Page of nearby profiles }
+  /discover/pass:
+    post:
+      summary: Pass on a nearby profile
+      responses:
+        '204': { description: Recorded }
+  /discover/like:
+    post:
+      summary: Like and connect with a nearby profile
+      responses:
+        '204': { description: Recorded }
+  /discover/super-like:
+    post:
+      summary: Super Like a nearby profile
+      responses:
+        '204': { description: Recorded }
+  /discover/trending:
+    get:
+      summary: Trending Sparks
+      security: []
+      parameters:
+        - name: filter
+          in: query
+          schema: { type: string, enum: [trending, new, reels, creative, audio_session] }
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200': { description: Page of sparks }
+  /discover/search:
+    get:
+      summary: Search users, posts, hashtags and pods
+      security: []
+      parameters:
+        - { name: q, in: query, required: true, schema: { type: string, minLength: 2 } }
+      responses:
+        '200': { description: Search results }
+  /discover/hashtags/{hashtag}:
+    get:
+      summary: Posts for a hashtag
+      security: []
+      parameters:
+        - { name: hashtag, in: path, required: true, schema: { type: string } }
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200': { description: Page of posts }
+  /discover/audio-rooms:
+    get:
+      summary: Live audio rooms
+      security: []
+      responses:
+        '200': { description: Page of audio rooms }
+  /pods/feed:
+    get:
+      summary: Aggregated Pod feed
+      security: []
+      responses:
+        '200': { description: Pod feed, content: { application/json: { schema: { $ref: '#/components/schemas/PodFeed' } } } }
+  /pods/topics:
+    get:
+      summary: Trending Pod topics
+      security: []
+      parameters: [{ $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of topics }
+  /pods/live-count:
+    get:
+      summary: Total live listeners across public Pods
+      security: []
+      responses:
+        '200': { description: Live listener count, content: { application/json: { schema: { type: object, properties: { count: { type: integer } } } } } }
+  /pods:
+    post:
+      summary: Create a Pod (optionally start its live session)
+      requestBody:
+        content: { application/json: { schema: { $ref: '#/components/schemas/CreatePod' } } }
+      responses:
+        '201': { description: Created Pod }
+  /pods/{podId}:
+    get:
+      summary: Pod detail
+      security: []
+      parameters: [{ name: podId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Pod }
+    patch:
+      summary: Update a Pod you host
+      parameters: [{ name: podId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Updated Pod }
+    delete:
+      summary: End and delete a Pod you host
+      parameters: [{ name: podId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Deleted }
+  /pods/{podId}/join:
+    post:
+      summary: Join a Pod and open its live session
+      parameters: [{ name: podId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Pod membership }
+  /pods/{podId}/leave:
+    post:
+      summary: Leave a Pod
+      parameters: [{ name: podId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Left }
+  /pods/{podId}/polls:
+    post:
+      summary: Create a poll as the Pod host
+      parameters: [{ name: podId, in: path, required: true, schema: { type: string, format: uuid } }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question: { type: string }
+                description: { type: string }
+                options: { type: array, items: { type: string }, minItems: 2, maxItems: 6 }
+                durationHours: { type: integer, default: 24 }
+              required: [question, options]
+      responses:
+        '201': { description: Created poll, content: { application/json: { schema: { $ref: '#/components/schemas/PollCard' } } } }
+  /pods/{podId}/polls/{pollId}/vote:
+    post:
+      summary: Cast the single allowed vote
+      parameters:
+        - { name: podId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: pollId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        content: { application/json: { schema: { type: object, properties: { optionId: { type: string } }, required: [optionId] } } }
+      responses:
+        '200': { description: Updated poll, content: { application/json: { schema: { $ref: '#/components/schemas/PollCard' } } } }
+        '409': { $ref: '#/components/responses/Error' }
+  /pods/{podId}/polls/{pollId}/results:
+    get:
+      summary: Poll results
+      security: []
+      parameters:
+        - { name: podId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: pollId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200': { description: Poll, content: { application/json: { schema: { $ref: '#/components/schemas/PollCard' } } } }
+  /pods/{podId}/report:
+    post:
+      summary: Report a Pod
+      parameters: [{ name: podId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '202': { description: Accepted }
+  /communications/nexconn/token:
+    post:
+      summary: Issue a Nexconn access token for the authenticated account
+      responses:
+        '200':
+          description: Token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id: { type: string }
+                  access_token: { type: string }
+                  api_base_url: { type: string, nullable: true }
+        '503': { $ref: '#/components/responses/Error' }
+  /communications/conversations:
+    get:
+      summary: Server-owned conversation metadata
+      responses:
+        '200': { description: Page of conversation summaries }
+  /communications/call-history:
+    get:
+      summary: Call history
+      parameters: [{ $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of calls }
+    post:
+      summary: Record a completed call
+      responses:
+        '201': { description: Recorded }
+  /communications/devices:
+    post:
+      summary: Register an FCM device token
+      responses:
+        '204': { description: Registered }
+  /communications/devices/{deviceId}:
+    delete:
+      summary: Remove a device token
+      parameters: [{ name: deviceId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Removed }
+  /media/upload-intent:
+    post:
+      summary: Create a presigned upload URL
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fileName: { type: string }
+                mimeType: { type: string }
+                sizeBytes: { type: integer }
+              required: [fileName, mimeType, sizeBytes]
+      responses:
+        '201': { description: Upload intent }
+  /media/complete:
+    post:
+      summary: Mark an upload ready
+      responses:
+        '200': { description: Media }
+  /media/{mediaId}:
+    get:
+      summary: Media metadata
+      security: []
+      parameters: [{ name: mediaId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '200': { description: Media }
+    delete:
+      summary: Delete your media
+      parameters: [{ name: mediaId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Deleted }
+  /notifications:
+    get:
+      summary: Notifications
+      parameters: [{ $ref: '#/components/parameters/Page' }]
+      responses:
+        '200': { description: Page of notifications }
+  /notifications/{notificationId}/read:
+    patch:
+      summary: Mark one notification read
+      parameters: [{ name: notificationId, in: path, required: true, schema: { type: string, format: uuid } }]
+      responses:
+        '204': { description: Updated }
+  /notifications/read-all:
+    post:
+      summary: Mark all notifications read
+      responses:
+        '204': { description: Updated }
+  /notifications/preferences:
+    get:
+      summary: Notification preferences
+      responses:
+        '200': { description: Preferences }
+    patch:
+      summary: Update notification preferences
+      responses:
+        '200': { description: Updated preferences }
+  /reports:
+    post:
+      summary: Report a user or piece of content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetType: { type: string, enum: [user, post, comment, story, moment, pod, message] }
+                targetId: { type: string, format: uuid }
+                reason: { type: string }
+                details: { type: string, nullable: true }
+              required: [targetType, targetId, reason]
+      responses:
+        '202': { description: Accepted }
+    get:
+      summary: Reports you created
+      responses:
+        '200': { description: Page of reports }
+  /webhooks/nexconn/chat:
+    post:
+      summary: Nexconn chat webhook (signed)
+      security: []
+      responses:
+        '200': { description: Accepted or duplicate }
+        '401': { $ref: '#/components/responses/Error' }
+  /webhooks/nexconn/call:
+    post:
+      summary: Nexconn call webhook (signed)
+      security: []
+      responses:
+        '200': { description: Accepted or duplicate }
+        '401': { $ref: '#/components/responses/Error' }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    PostId:
+      name: postId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 0, default: 0 }
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code: { type: string }
+              message: { type: string }
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        email: { type: string }
+        username: { type: string }
+        displayName: { type: string }
+        password: { type: string, minLength: 8 }
+      required: [email, username, displayName, password]
+    AuthResponse:
+      type: object
+      properties:
+        user: { $ref: '#/components/schemas/User' }
+        tokens:
+          type: object
+          properties:
+            access_token: { type: string }
+            refresh_token: { type: string }
+            expires_in: { type: integer }
+    User:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        display_name: { type: string }
+        username: { type: string }
+        avatar_url: { type: string }
+        verified: { type: boolean }
+        follower_count: { type: integer }
+        following_count: { type: integer }
+        bio: { type: string }
+        category: { type: string, nullable: true }
+        location: { type: string, nullable: true }
+        online: { type: boolean }
+    UpdateProfile:
+      type: object
+      properties:
+        displayName: { type: string }
+        username: { type: string }
+        bio: { type: string, maxLength: 280 }
+        avatarUrl: { type: string }
+        location: { type: string }
+        website: { type: string }
+        category: { type: string }
+        isPrivate: { type: boolean }
+    Location:
+      type: object
+      properties:
+        latitude: { type: number }
+        longitude: { type: number }
+        privacyBandKm: { type: integer, minimum: 1, maximum: 50, default: 5 }
+      required: [latitude, longitude]
+    Post:
+      type: object
+      properties:
+        id: { type: string }
+        author: { $ref: '#/components/schemas/User' }
+        media_url: { type: string }
+        media_type: { type: string, enum: [IMAGE, VIDEO] }
+        caption: { type: string }
+        like_count: { type: integer }
+        comment_count: { type: integer }
+        share_count: { type: integer }
+        is_liked: { type: boolean }
+        is_bookmarked: { type: boolean }
+        created_at: { type: integer, format: int64 }
+        media_aspect_ratio: { type: number }
+        video_duration_seconds: { type: integer, nullable: true }
+    PostPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/Post' }
+        next_cursor: { type: string, nullable: true }
+    CreatePost:
+      type: object
+      properties:
+        caption: { type: string, maxLength: 2200 }
+        mediaUrl: { type: string }
+        mediaId: { type: string, format: uuid }
+        mediaType: { type: string, enum: [IMAGE, VIDEO] }
+        aspectRatio: { type: number }
+        durationSeconds: { type: integer }
+        hashtag: { type: string }
+        kind: { type: string, enum: [post, reel, essay] }
+        visibility: { type: string, enum: [public, followers, private] }
+    CreatePod:
+      type: object
+      properties:
+        title: { type: string, maxLength: 120 }
+        description: { type: string }
+        topicHashtag: { type: string }
+        visibility: { type: string, enum: [public, private] }
+        artworkUrl: { type: string }
+        audioOnly: { type: boolean }
+        coHostIds: { type: array, items: { type: string, format: uuid } }
+        startLive: { type: boolean }
+      required: [title]
+    PollCard:
+      type: object
+      properties:
+        id: { type: string }
+        pod_id: { type: string }
+        author: { $ref: '#/components/schemas/User' }
+        question: { type: string }
+        description: { type: string }
+        ends_in: { type: string }
+        total_votes: { type: integer }
+        reply_count: { type: integer }
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              text: { type: string }
+              vote_count: { type: integer }
+              percentage: { type: integer }
+        my_vote_option_id: { type: string, nullable: true }
+    PodFeed:
+      type: object
+      properties:
+        polls: { type: array, items: { $ref: '#/components/schemas/PollCard' } }
+        liveAudio: { type: array, items: { type: object } }
+        mediaReels: { type: array, items: { type: object } }
+        editorials: { type: array, items: { type: object } }
+        soundtracks: { type: array, items: { type: object } }
+        essays: { type: array, items: { type: object } }
